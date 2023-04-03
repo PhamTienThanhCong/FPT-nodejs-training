@@ -7,7 +7,7 @@ var session = require('express-session');
 
 const authRoute = require("./routes/Auth");
 const userRoute = require("./routes/User");
-
+const categoryRoute = require("./routes/Category");
 const homeRoute = require("./routes/Home");
 
 
@@ -45,9 +45,11 @@ app.use(session({
   }));
   
 
-//routers
+//routers test api
 app.use('/v1/auth', authRoute);
+app.use('/v1/category', categoryRoute);
 app.use('/v1/user', userRoute);
+
 app.use('/', homeRoute);
 
 let port = 8000;
