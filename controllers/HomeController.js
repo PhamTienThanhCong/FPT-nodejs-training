@@ -1,9 +1,13 @@
+const Order = require('../models/Order');
+const Cart = require('../models/Cart');
+const User = require('../models/User');
+const Product = require('../models/Product');
+
+
 const HomeController = {
-    index: (req, res) => {
+    index: async(req, res) => {
+        // render
         res.render('index');
-    },
-    test: (req, res) => {
-        res.render('test');
     }
 }
 

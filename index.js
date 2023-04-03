@@ -5,7 +5,11 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 var session = require('express-session');
 
+const authRoute = require("./routes/Auth");
+const userRoute = require("./routes/User");
+
 const homeRoute = require("./routes/Home");
+
 
 dotenv.config();
 const app = express();
@@ -42,6 +46,8 @@ app.use(session({
   
 
 //routers
+app.use('/v1/auth', authRoute);
+app.use('/v1/user', userRoute);
 app.use('/', homeRoute);
 
 let port = 8000;
