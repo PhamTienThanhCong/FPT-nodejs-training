@@ -5,9 +5,6 @@ const CategoryController = {
     getAllCategories: async(req, res) => {
         try {
             const categories = await Category.find();
-            res.header("Access-Control-Expose-Headers", "Content-Range");
-           
-            res.header("Content-Range", `products 0-9/${categories.length}`);
             return res.status(200).json(categories);
         }catch(err) {
             return res.status(500).json(err);
@@ -15,7 +12,7 @@ const CategoryController = {
     },
     getCategory: async(req, res) => {
         try {
-            const category = await Category.findById(req.params.id).populate('products');
+            const category = await Category.findById(req.params.id);
             return res.status(200).json(category);
         }catch(err) {
             return res.status(500).json(err);

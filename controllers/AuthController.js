@@ -1,5 +1,4 @@
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const Cart = require('../models/Cart');
 const dotenv = require('dotenv');
@@ -31,7 +30,6 @@ const authController = {
 
             user.cart = cart.id;
             await user.save();
-            await cart.save();
             
             await cart.save();
             return res.status(200).json(user);
