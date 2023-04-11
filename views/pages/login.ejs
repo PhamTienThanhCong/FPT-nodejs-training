@@ -41,6 +41,12 @@
 						<div class="form-content">
 							<div class="login-form">
 								<div class="title">Login</div>
+								<% if (successMessage) { %>
+									<div class="alert alert-success"><%= successMessage %></div>
+								<% } %>
+								<% if (failMessage) { %>
+									<div class="alert alert-danger"><%= failMessage %></div>
+								<% } %>
 								<form id="form-login" method="post" action="/login">
 									<div class="input-boxes">
 										<div class="input-box">
@@ -64,6 +70,12 @@
 							</div>
 							<div class="signup-form">
 								<div class="title">Signup</div>
+								<% if (successMessage) { %>
+									<div class="alert alert-success"><%= successMessage %></div>
+								<% } %>
+								<% if (failMessage) { %>
+									<div class="alert alert-danger"><%= failMessage %></div>
+								<% } %>
 								<form id="form-register" action="/register" method="post">
 									<div class="input-boxes">
 										<div class="input-box">

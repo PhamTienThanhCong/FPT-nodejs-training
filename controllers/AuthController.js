@@ -39,11 +39,11 @@ const AuthController = {
             await cart.save();
             
             await cart.save();
-            req.session.successMessage = 'Đăng ký thành công!';
+            req.session.successMessage = 'resgister success!, please login to continue';
             res.redirect('/login');
 
         } catch (err) {
-            req.session.failMessage = 'Đăng ký thất bại, vui lòng thử lại!';
+            req.session.failMessage = 'resgister fail!, please try again';
             res.redirect('/login');
         }
     },
@@ -52,12 +52,12 @@ const AuthController = {
         try {
             const user = await User.findOne({ username: req.body.username });
             if (!user) {
-                req.session.failMessage = 'Sai tài khoản hoặc mật khẩu!';
+                req.session.failMessage = 'username or password is incorrect!';
                 return res.redirect('/login');
             }
             const validPassword = await bcrypt.compare(req.body.password, user.password);
             if (!validPassword) {
-                req.session.failMessage = 'Sai tài khoản hoặc mật khẩu!';
+                req.session.failMessage = 'username or password is incorrect!';
                 return res.redirect('/login');
             }
             if (user && validPassword) {
@@ -66,10 +66,10 @@ const AuthController = {
                 sess.username = user;
                 return res.redirect('/');
             }
-            req.session.failMessage = 'Sai tài khoản hoặc mật khẩu!';
+            req.session.failMessage = 'username or password is incorrect!';
             return res.redirect('/login');
         } catch (err) {
-            req.session.failMessage = 'Sai tài khoản hoặc mật khẩu!';
+            req.session.failMessage = 'username or password is incorrect!';
             return res.redirect('/login');
         }
     },
