@@ -1,12 +1,18 @@
-const bcrypt = require('bcrypt');
 const User = require('../models/User');
-const Cart = require('../models/Cart');
-const dotenv = require('dotenv');
+const bcrypt = require('bcrypt');
 
-dotenv.config();
-
-var data
-const authController = {
+const AuthController = {
+    login: async (req, res) => {
+        const successMessage = req.session.successMessage; // Lấy thông báo từ session
+        req.session.successMessage = null; // Xóa thông báo khỏi session
+        const failMessage = req.session.failMessage; // Lấy thông báo từ session
+        req.session.failMessage = null; // Xóa thông báo khỏi session
+        // render
+        res.render('pages/login', {
+            successMessage: successMessage,
+            failMessage: failMessage
+        });
+    },
     registerUser: async (req, res) => {
         try {
             const salt = await bcrypt.genSalt(10);
@@ -30,12 +36,15 @@ const authController = {
 
             user.cart = cart.id;
             await user.save();
+            await cart.save();
             
             await cart.save();
-            return res.status(200).json(user);
+            req.session.successMessage = 'Đăng ký thành công!';
+            res.redirect('/login');
+
         } catch (err) {
-            console.log(data)
-            return res.status(500).json(err);
+            req.session.failMessage = 'Đăng ký thất bại, vui lòng thử lại!';
+            res.redirect('/login');
         }
     },
     //LOGIN
@@ -43,36 +52,54 @@ const authController = {
         try {
             const user = await User.findOne({ username: req.body.username });
             if (!user) {
-                return res.status(404).json({ message: 'User not found' });
+                req.session.failMessage = 'Sai tài khoản hoặc mật khẩu!';
+                return res.redirect('/login');
             }
             const validPassword = await bcrypt.compare(req.body.password, user.password);
             if (!validPassword) {
-                return res.status(400).json({ message: 'Wrong password' });
+                req.session.failMessage = 'Sai tài khoản hoặc mật khẩu!';
+                return res.redirect('/login');
             }
             if (user && validPassword) {
                 var sess = req.session; 
                 sess.daDangNhap = true;
-                sess.username = userWithPasswords;
-                return res.status(200).json({ message: 'Logged in', user: user });
+                sess.username = user;
+                return res.redirect('/');
             }
+            req.session.failMessage = 'Sai tài khoản hoặc mật khẩu!';
+            return res.redirect('/login');
         } catch (err) {
+            req.session.failMessage = 'Sai tài khoản hoặc mật khẩu!';
+            return res.redirect('/login');
+        }
+    },
+    myaccount: async (req, res) => {
+        return res.render('pages/myaccount');
+    },
+    updateUser: async (req, res) => {
+        try {
+            var sess = req.session;
+            const salt = await bcrypt.genSalt(10);
+            const hashed = await bcrypt.hash(req.body.password, salt);
+            const id = sess.username.id;
+            const newUser = req.body;
+            newUser.password = hashed;
+            console.log(newUser);
+            const user = await User.findByIdAndUpdate(id, {
+                $set: newUser
+            }, {new: true});
+            sess.username = user;
+            res.redirect('/account');
+        }
+        catch(err) {
             return res.status(500).json(err);
         }
     },
-    //logout
     logoutUser: async (req, res) => {
         req.session.destroy();
-        return res.status(200).json({ message: 'Logged out' });
+        res.redirect('/');
     },
-    // checkLogin
-    checkLogin: async (req, res) => {
-        if (req.session.daDangNhap) {
-            return res.status(200).json({ message: 'Logged in', user: req.session.username });
-        } else {
-            return res.status(200).json({ message: 'Not logged in' });
-        }
-    }
+
 }
 
-module.exports = authController;
-    
+module.exports = AuthController;

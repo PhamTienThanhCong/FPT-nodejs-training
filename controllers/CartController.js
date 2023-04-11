@@ -1,30 +1,21 @@
+const Order = require('../models/Order');
 const Cart = require('../models/Cart');
-const Product = require('../models/Product');
 const User = require('../models/User');
-
+const Product = require('../models/Product');
 
 const CartController = {
-    getCart: async(req, res) => {
-        try {
-            const cart = await Cart.findById(req.params.id);
-            return res.status(200).json(cart);
+    cart: async (req, res) => {
+        var sess = req.session;
+        const id = sess.username.id;
+        const user = await User.findById(id);
+        const cart = await Cart.findById(user.cart).populate('products.productId');
+        let total = 0;
+        for (const element of cart.products) {
+            total += element.productId.price * element.quantity;
         }
-        catch(err) {
-            return res.status(500).json(err);
-        }
+        res.render('pages/cart', { cart, total });
     },
-    //get cart by user id
-    getCartByUserId: async(req, res) => {
-        try {
-            const user = await User.findById(req.params.id);
-            const cart = await Cart.findById(user.cart);
-            return res.status(200).json(cart);
-        }
-        catch(err) {
-            return res.status(500).json(err);
-        }
-    },
-    addToCart: async(req, res) => {
+    addToCart: async (req, res) => {
         try {
             const user = await User.findById(req.params.id);
             const productId = req.params.productId;
@@ -49,54 +40,99 @@ const CartController = {
                 });
             }
 
-            cart.products = products;
-
-            await cart.save();
-
-            return res.status(200).json(cart);
-        }
-        catch(err) {
-            return res.status(500).json(err);
-        }
-    },
-    removeFromCart: async(req, res) => {
-        try {
-            const user = await User.findById(req.params.id);
-            const productId = req.params.productId;
-            const cart = await Cart.findById(user.cart);
-            let products = cart.products;
-
-            for(const element of products) {
-                if(element.productId == productId) {
-                    products.splice(products.indexOf(element), 1);
-                    break;
-                }
+            // nếu newQuantity = 0 thì xóa sản phẩm khỏi giỏ hàng
+            if(newQuantity == 0) {
+                products = products.filter(element => element.productId != productId);
             }
 
             cart.products = products;
 
             await cart.save();
 
-            return res.status(200).json(cart);
+            // return res.status(200).json(cart);
+            res.redirect('/cart');
         }
         catch(err) {
             return res.status(500).json(err);
         }
-
     },
-
-    clearCart: async(req, res) => {
+    removeFromCart: async (req, res) => {
         try {
-            const user = await User.findById(req.params.id);
+            var sess = req.session;
+            const id = sess.username.id;
+            const user = await User.findById(id);
             const cart = await Cart.findById(user.cart);
             cart.products = [];
             await cart.save();
-            return res.status(200).json(cart);
+            res.redirect('/cart');
         }
         catch(err) {
             return res.status(500).json(err);
         }
-    }
+    },
+    checkout: async (req, res) => {
+        var sess = req.session;
+        const id = sess.username.id;
+        const user = await User.findById(id);
+        const cart = await Cart.findById(user.cart).populate('products.productId');
+        let total = 0;
+        for (const element of cart.products) {
+            total += element.productId.price * element.quantity;
+        }
+        res.render('pages/checkout', { cart, total, id });
+    },
+    checkoutPost: async (req, res) => {
+        try {
+            var sess = req.session;
+            const id = sess.username.id;
+
+            const user = await User.findById(id);
+            const cart = await Cart.findById(user.cart);
+            const products = cart.products;
+            cart.products = [];
+            await cart.save();
+            // map products to get product details
+            const productsWithDetails = await Promise.all(products.map(async(product) => {
+                const productDetails = await Product.findById(product.productId);
+                return {
+                    productId: product.productId,
+                    quantity: product.quantity,
+                    name: productDetails.name,
+                    price: productDetails.price,
+                    image: productDetails.image,
+                }
+            }));
+            const userProfile = {
+                name: req.body.name,
+                email: req.body.email,
+                phone: req.body.phone,
+                address: req.body.address,
+                note: req.body.note,
+            }
+            const newOrder = new Order({
+                    userId: user.id,
+                    userProfile: userProfile,
+                    products: productsWithDetails,
+                    totalPrice: req.body.totalPrice,
+                });
+            await newOrder.save();
+            res.redirect('/checkoutSuccess');
+        }
+        catch(err) {
+            // console.log(err);
+            return res.status(500).json(err);
+        }
+    },
+    checkoutSuccess: async (req, res) => {
+        res.render('pages/checkoutSuccess');
+    },
+    orderHistory: async (req, res) => {
+        var sess = req.session;
+        const id = sess.username.id;
+        const data = await Order.find({userId: id}).sort({createdAt: -1});;
+        res.render('pages/orderHistory', { data });
+    },
+
 }
 
 module.exports = CartController;

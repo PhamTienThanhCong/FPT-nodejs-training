@@ -1,31 +1,14 @@
-const Order = require('../models/Order');
-const Cart = require('../models/Cart');
-const User = require('../models/User');
-const Product = require('../models/Product');
+const Order = require('../../models/Order');
+const Cart = require('../../models/Cart');
+const User = require('../../models/User');
+const Product = require('../../models/Product');
 
 const OrderController = {
     getOrders: async(req, res) => {
         try {
-            const orders = await Order.find();
-            // get user details and add to order
-            const ordersWithUserDetails = await Promise.all(orders.map(async(order) => {
-                const user = await User.findById(order.userId);
-                return {
-                    _id: order._id,
-                    userId: order.userId,
-                    products: order.products,
-                    totalPrice: order.totalPrice,
-                    status: order.status,
-                    createdAt: order.createdAt,
-                    user: {
-                        username: user.username,
-                        email: user.email,
-                        phone: user.phone,
-                        address: user.address,
-                    }
-                }
-            }));
-            return res.status(200).json(ordersWithUserDetails);
+            // Lấy toàn bộ từ mới nhất đến cũ nhất
+            const orders = await Order.find().sort({createdAt: -1});
+            return res.status(200).json(orders);
         }
         catch(err) {
             return res.status(500).json(err);
@@ -44,23 +27,7 @@ const OrderController = {
     getOrder: async(req, res) => {
         try {
             const order = await Order.findById(req.params.id);
-            // get user and add to order
-            const user = await User.findById(order.userId);
-            const orderWithUserDetails = {
-                _id: order._id,
-                userId: order.userId,
-                products: order.products,
-                totalPrice: order.totalPrice,
-                status: order.status,
-                createdAt: order.createdAt,
-                user: {
-                    username: user.username,
-                    email: user.email,
-                    phone: user.phone,
-                    address: user.address,
-                }
-            }
-            return res.status(200).json(orderWithUserDetails);
+            return res.status(200).json(order);
         }
         catch(err) {
             return res.status(500).json(err);

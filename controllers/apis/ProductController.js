@@ -1,5 +1,5 @@
-const Product = require('../models/Product');
-const Category = require('../models/Category');
+const Product = require('../../models/Product');
+const Category = require('../../models/Category');
 
 
 const ProductController = {
@@ -20,13 +20,7 @@ const ProductController = {
             }
             else {
                 products = await Object.assign(Product.find());
-                console.log('aaaa')
             }
-            console.log(products);
-            // add header access control expose headers
-            res.header("Access-Control-Expose-Headers", "Content-Range");
-
-            res.header("Content-Range", `products 0-9/${products.length}`);
 
             return res.status(200).json(products);
         } catch (err) {

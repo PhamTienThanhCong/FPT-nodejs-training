@@ -20,6 +20,7 @@
     "jsonwebtoken": "^8.5.1",
     "loader": "^2.1.1",
     "mongoose": "^6.6.5",
+    "mongoose-paginate-v2": "^1.7.1",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.20",
     "paypal-rest-sdk": "^1.8.1"

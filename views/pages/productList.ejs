@@ -4,7 +4,7 @@
 <!-- Mirrored from preview.colorlib.com/theme/sublime/categories.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Mar 2023 16:25:37 GMT -->
 
 <head>
-	<title><%= category.name %></title>
+	<title>list products</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="description" content="Sublime project">
@@ -26,18 +26,16 @@
 
 		<div class="home">
 			<div class="home_container">
-				<div class="home_background" style="background-image:url(<%= category.image %>)"></div>
+				<div class="home_background" style="background-image:url(/images/categories.jpg)"></div>
 				<div class="home_content_container">
 					<div class="container">
 						<div class="row">
 							<div class="col">
 								<div class="home_content">
-									<div class="home_title" style="color: black;">
-										<%= category.name %>
-									</div>
+									<div class="home_title">all products<span>.</span></div>
 									<div class="home_text">
-										<p style="color: black;">
-											<%= category.description %>
+										<p>
+											We wish you a happy shopping!
 										</p>
 									</div>
 								</div>
@@ -52,12 +50,12 @@
 			<div class="container">
 				<div class="row">
 					<div class="col">
-
 						<div
 							class="sorting_bar d-flex flex-md-row flex-column align-items-md-center justify-content-md-start">
 							<div class="results">Showing <span>
-								<%= category.products.length %>
+									<%= products.totalDocs %>
 							</span> results</div>
+							<!-- form searching -->
 							<div class="sorting_container ml-md-auto">
 								<div class="sorting">
 									<ul class="item_sorting">
@@ -82,9 +80,15 @@
 				</div>
 				<div class="row">
 					<div class="col">
+						<form action="/products" method="GET" style="display: flex;">
+							<div class="sorting" style="display: flex;">
+							  <input type="text" name="search" placeholder="Search" value="<%= searchQuery %>" style="padding: 5px; margin-right: 5px;">
+							  <button type="submit" style="padding: 5px; background-color: #007bff; color: #fff; border: none; cursor: pointer;">Search</button>
+							</div>
+						  </form>
 						<div class="product_grid">
-							<!-- render product -->
-							<% for (let product of category.products) { %>
+
+							<% for (let product of products.docs) { %>
 								<div class="product">
 									<div class="product_image"><img style="object-fit: cover; width: 225px; height: 225px;" src="<%= product.image %>" alt=""></div>
 									<div class="product_content">
@@ -93,7 +97,19 @@
 									</div>
 								</div>
 							<% } %>
-
+							
+						</div>
+						<div class="product_pagination">
+							<ul>
+								<% for (let i=1; i<=products.totalPages;i++) { %>
+									<!-- if i == products.page -->
+									<% if (i == products.page) { %>
+										<li class="active"><a href="/products?page=<%= i %>"><%= i %></a></li>
+									<% } else { %>
+										<li><a href="/products?page=<%= i %>"><%= i %></a></li>
+									<% } %>
+								<% } %>
+							</ul>
 						</div>
 					</div>
 				</div>

@@ -1,5 +1,5 @@
-const Category = require('../models/Category');
-const Product = require('../models/Product');
+const Category = require('../../models/Category');
+const Product = require('../../models/Product');
 
 const CategoryController = {
     getAllCategories: async(req, res) => {
@@ -12,7 +12,7 @@ const CategoryController = {
     },
     getCategory: async(req, res) => {
         try {
-            const category = await Category.findById(req.params.id);
+            const category = await Category.findById(req.params.id).populate('products');
             return res.status(200).json(category);
         }catch(err) {
             return res.status(500).json(err);

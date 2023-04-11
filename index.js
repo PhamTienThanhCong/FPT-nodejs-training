@@ -4,15 +4,20 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 var session = require('express-session');
+const bodyParser = require('body-parser');
 
-const authRoute = require("./routes/Auth");
-const userRoute = require("./routes/User");
-const categoryRoute = require("./routes/Category");
+const categoryApiRoute = require("./routes/apis/Category");
+const productApiRoute = require("./routes/apis/Product");
+const authApiRoute = require("./routes/apis/Auth");
+const userApiRoute = require("./routes/apis/User");
+const cartApiRoute = require("./routes/apis/Cart");
+const orderApiRoute = require("./routes/apis/Order");
+
 const homeRoute = require("./routes/Home");
-const productRoute = require("./routes/Product");
 const cartRoute = require("./routes/Cart");
-const orderRoute = require("./routes/Order");
+const authRoute = require("./routes/Auth");
 
+const middleware = require('./middleware/middleware'); 
 
 dotenv.config();
 const app = express();
@@ -20,6 +25,8 @@ const app = express();
 app.set("views",__dirname + "/views");
 app.set("view engine", "ejs");
 app.use("/", express.static(__dirname + "/public"));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 // connect mongodb
 mongoose.connect(process.env.MONGODB_URL, () => {
@@ -48,15 +55,18 @@ app.use(session({
   }));
   
 
-//routers test api
-app.use('/v1/auth', authRoute);
-app.use('/v1/category', categoryRoute);
-app.use('/v1/user', userRoute);
-app.use('/v1/cart',cartRoute);
-app.use('/v1/order', orderRoute);
-app.use('/v1/product', productRoute);
+//routers
+app.use('/v1/category', categoryApiRoute);
+app.use('/v1/product', productApiRoute);
+app.use('/v1/auth', authApiRoute);
+app.use('/v1/user', userApiRoute);
+app.use('/v1/cart',cartApiRoute);
+app.use('/v1/order', orderApiRoute);
 
-app.use('/', homeRoute);
+// thêm middleware vào app.use('/', homeRoute);
+app.use('/', middleware.settingMiddleware, homeRoute);
+app.use('/', middleware.settingMiddleware, authRoute);
+app.use('/', middleware.authMiddleware, cartRoute);
 
 let port = 8000;
 app.listen(port, () => console.log('server is running in port ' + port));

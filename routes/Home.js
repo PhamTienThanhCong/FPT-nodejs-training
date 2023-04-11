@@ -1,12 +1,12 @@
-const OrderController = require('../controllers/HomeController');
+const HomeController = require('../controllers/HomeController');
+const AuthController = require('../controllers/AuthController');
 
 const router = require('express').Router();
 
-router.get('/', OrderController.index);
-router.get('/category/:id', OrderController.category);
-router.get('/contact', OrderController.contact);
-router.get('/product', OrderController.product);
-router.get('/cart', OrderController.cart);
-router.get('/checkout', OrderController.checkout);
+router.get('/', HomeController.index);
+router.get('/category/:id', HomeController.category);
+router.get('/contact', HomeController.contact);
+router.get('/product/:id', HomeController.product);
+router.get('/products', HomeController.productList);
 
 module.exports = router;

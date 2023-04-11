@@ -6,6 +6,17 @@ const OrderSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
+    userProfile: {
+        type: Object,
+        required: true,
+        default: {
+            name: '',
+            email: '',
+            phone: '',
+            address: '',
+            note: ''
+        }
+    },
     products: [{
         type: Object,
         required: true}
@@ -20,10 +31,10 @@ const OrderSchema = new mongoose.Schema({
     },
     paymentType: {
         type: String,
-        default : 'Paypal'
+        default : 'Cash on delivery'
     }
     
 },
 {timestamps: true});
 
-module.exports = mongoose.model('GioHang', OrderSchema);
+module.exports = mongoose.model('giohang', OrderSchema);
