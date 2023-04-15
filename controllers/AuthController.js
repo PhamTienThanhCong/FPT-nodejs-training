@@ -1,12 +1,13 @@
 const User = require('../models/User');
+const Cart = require("../models/Cart")
 const bcrypt = require('bcrypt');
 
 const AuthController = {
     login: async (req, res) => {
-        const successMessage = req.session.successMessage; // Lấy thông báo từ session
-        req.session.successMessage = null; // Xóa thông báo khỏi session
-        const failMessage = req.session.failMessage; // Lấy thông báo từ session
-        req.session.failMessage = null; // Xóa thông báo khỏi session
+        const successMessage = req.session.successMessage; 
+        req.session.successMessage = null;
+        const failMessage = req.session.failMessage; 
+        req.session.failMessage = null;
         // render
         res.render('pages/login', {
             successMessage: successMessage,
@@ -62,7 +63,7 @@ const AuthController = {
             }
             if (user && validPassword) {
                 var sess = req.session; 
-                sess.daDangNhap = true;
+                sess.isLogined = true;
                 sess.username = user;
                 return res.redirect('/');
             }
@@ -84,7 +85,7 @@ const AuthController = {
             const id = sess.username.id;
             const newUser = req.body;
             newUser.password = hashed;
-            console.log(newUser);
+
             const user = await User.findByIdAndUpdate(id, {
                 $set: newUser
             }, {new: true});

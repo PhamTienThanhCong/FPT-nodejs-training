@@ -5,15 +5,15 @@ async function settingMiddleware(req, res, next) {
         const categories = await Category.find();
         // check login
         var sess = req.session;
-        if (sess.daDangNhap) {
+        if (sess.isLogined) {
             res.locals.user = sess.username;
-            res.locals.daDangNhap = true; 
+            res.locals.isLogined = true; 
         }else{
             res.locals.user = {
                 username: 'Guest',
                 id: '0'
             };
-            res.locals.daDangNhap = false;
+            res.locals.isLogined = false;
         }
         res.locals.categories = categories;
         next();
@@ -22,13 +22,14 @@ async function settingMiddleware(req, res, next) {
     }
 }
 
-function authMiddleware(req, res, next) {
+async function authMiddleware(req, res, next) {
     var sess = req.session;
-    if (!sess.daDangNhap) {
+    const categories = await Category.find();
+    if (!sess.isLogined) {
         return res.redirect('/login');
     }
     res.locals.user = sess.username;
-    res.locals.daDangNhap = true; 
+    res.locals.isLogined = true; 
     res.locals.categories = categories;
     next();
 }

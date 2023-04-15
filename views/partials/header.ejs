@@ -24,7 +24,7 @@
                         </nav>
                         <div class="header_extra ml-auto">
                             <div class="shopping_cart">
-                                <% if (daDangNhap) { %>
+                                <% if (isLogined) { %>
                                     <a href="/cart">
                                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
                                             xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 489 489"
@@ -43,7 +43,7 @@
                                 <% } %>
                             </div>
                             <div class="shopping_cart ml-4">
-                                <% if (daDangNhap) { %>
+                                <% if (isLogined) { %>
                                   <div class="dropdown">
                                     <a href="#" class="dropdown-toggle" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                       <img style="border-radius: 50%;" width="30px" height="30px" src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=2000" alt="">

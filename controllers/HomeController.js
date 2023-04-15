@@ -1,9 +1,5 @@
-const Order = require('../models/Order');
-const Cart = require('../models/Cart');
-const User = require('../models/User');
 const Product = require('../models/Product');
 const Category = require('../models/Category');
-const bcrypt = require('bcrypt');
 
 const HomeController = {
     index: async (req, res) => {
@@ -12,8 +8,8 @@ const HomeController = {
         res.render('pages/index', { products });
     },
     category: async (req, res) => {
-        const id = req.params.id;
-        const category = await Category.findOne({ name: id }).populate('products');
+        const name = req.params.id;
+        const category = await Category.findOne({ name: name }).populate('products');
         res.render('pages/categories', { category });
     },
     contact: async (req, res) => {
@@ -22,14 +18,12 @@ const HomeController = {
     },
     productList: async (req, res) => {
         const options = {
-            page: req.query.page || 1, // Trang hiện tại (mặc định là 1)
-            limit: 12, // Số lượng sản phẩm trên mỗi trang
+            page: req.query.page || 1, 
+            limit: 12, 
         };
         const searchQuery = req.query.search || '';
 
-        // Tạo điều kiện truy vấn dựa trên giá trị searchQuery
         const query = {
-            // Tìm kiếm theo tên sản phẩm hoặc mô tả, không phân biệt chữ hoa/chữ thường
             $or: [
                 { name: { $regex: searchQuery, $options: 'i' } },
                 { description: { $regex: searchQuery, $options: 'i' } },

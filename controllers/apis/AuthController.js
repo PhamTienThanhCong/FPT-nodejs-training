@@ -52,7 +52,7 @@ const authController = {
             }
             if (user && validPassword) {
                 var sess = req.session; 
-                sess.daDangNhap = true;
+                sess.isLogined = true;
                 sess.username = user;
                 return res.status(200).json({ message: 'Logged in', user: user });
             }
@@ -65,7 +65,7 @@ const authController = {
     checkLogin: async (req, res) => {
         try {
             var sess = req.session;
-            if (sess.daDangNhap) {
+            if (sess.isLogined) {
                 return res.status(200).json({ message: 'Logged in', user: sess.username });
             }
             return res.status(500).json("chua dang nhap");
