@@ -19,6 +19,7 @@
     "express-session": "^1.17.3",
     "jsonwebtoken": "^8.5.1",
     "loader": "^2.1.1",
+    "moment": "^2.29.4",
     "mongoose": "^6.6.5",
     "mongoose-paginate-v2": "^1.7.1",
     "morgan": "^1.10.0",

@@ -15,7 +15,10 @@ async function settingMiddleware(req, res, next) {
             };
             res.locals.isLogined = false;
         }
+
         res.locals.categories = categories;
+        res.locals.siteName = process.env.NAME_WEB;
+        res.locals.siteNameShort = process.env.NAME_WEB_SHORT;
         next();
     }catch(err) {
         next();
@@ -34,7 +37,22 @@ async function authMiddleware(req, res, next) {
     next();
 }
 
+async function authAdminMiddleware(req, res, next) {
+    var sess = req.session;
+    if (!sess.isLogined) {
+        return res.redirect('/login');
+    }
+    if (sess.admin != true) {
+        return res.redirect('/login');
+    }
+    res.locals.user = sess.username;
+
+    res.locals.isLogined = true;
+    next();
+}
+
 module.exports = {
     settingMiddleware: settingMiddleware,
-    authMiddleware: authMiddleware
+    authMiddleware: authMiddleware,
+    authAdminMiddleware: authAdminMiddleware
 };

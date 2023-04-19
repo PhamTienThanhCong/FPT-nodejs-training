@@ -1,0 +1,80 @@
+<aside class="main-sidebar">
+
+    <section class="sidebar">
+
+        <div class="user-panel">
+            <div class="pull-left image">
+                <img src="../../dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+            </div>
+            <div class="pull-left info">
+                <p><%= user.username %></p>
+                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+            </div>
+        </div>
+
+        <ul class="sidebar-menu" data-widget="tree">
+            <li class="header">MAIN NAVIGATION</li>
+            <li>
+                <a href="/admin">
+                    <i class="fa fa-dashboard"></i> <span>dashboard</span>
+                    <span class="pull-right-container">
+                        <small class="label pull-right bg-green">Hot</small>
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/cart">
+                    <i class="fa fa-solid fa-cart-shopping"></i> <span>order manager</span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-solid fa-list"></i>
+                    <span>category manager</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="/admin/category"><i class="fa fa-circle-o"></i> category</a></li>
+                    <li><a href="/admin/category/add"><i class="fa fa-circle-o"></i> new category</a></li>
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-solid fa-bag-shopping"></i> <span>product manager</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="/admin/product"><i class="fa fa-circle-o"></i> product</a></li>
+                    <li><a href="/admin/product/add"><i class="fa fa-circle-o"></i> new product</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="/admin/customer">
+                    <i class="fa fa-solid fa-users"></i>
+                    <span>customer manager</span>
+                </a>
+            </li>
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-regular fa-user"></i> <span>account manager</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="/admin/account"><i class="fa fa-circle-o"></i> account</a></li>
+                    <li><a href="/admin/account/change-password"><i class="fa fa-circle-o"></i> change password</a></li>
+                    <li><a href="/admin/account/add"><i class="fa fa-circle-o"></i> new admin</a></li>
+
+                </ul>
+            </li>
+            
+        </ul>
+    </section>
+
+</aside>

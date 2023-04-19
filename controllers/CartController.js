@@ -28,7 +28,7 @@ const CartController = {
             for(const element of products) {
                 if(element.productId == productId) {
                     productExists = false;
-                    element.quantity = newQuantity;
+                    element.quantity += newQuantity;
                     break;
                 }
             }
@@ -40,7 +40,6 @@ const CartController = {
                 });
             }
 
-            // nếu newQuantity = 0 thì xóa sản phẩm khỏi giỏ hàng
             if(newQuantity == 0) {
                 products = products.filter(element => element.productId != productId);
             }
@@ -129,7 +128,7 @@ const CartController = {
     orderHistory: async (req, res) => {
         var sess = req.session;
         const id = sess.username.id;
-        const data = await Order.find({userId: id}).sort({createdAt: -1});;
+        const data = await Order.find({userId: id}).sort({createdAt: -1});
         res.render('pages/orderHistory', { data });
     },
 

@@ -6,12 +6,13 @@ const morgan = require('morgan');
 var session = require('express-session');
 const bodyParser = require('body-parser');
 
-const categoryApiRoute = require("./routes/apis/Category");
-const productApiRoute = require("./routes/apis/Product");
-const authApiRoute = require("./routes/apis/Auth");
-const userApiRoute = require("./routes/apis/User");
-const cartApiRoute = require("./routes/apis/Cart");
-const orderApiRoute = require("./routes/apis/Order");
+const homeAdminRoute = require("./routes/admin/Home");
+const categoryAdminRoute = require("./routes/admin/Category");
+const productAdminRoute = require("./routes/admin/Product");
+const authAdminRoute = require("./routes/admin/Auth");
+const userAdminRoute = require("./routes/admin/User");
+const cartAdminRoute = require("./routes/admin/Cart");
+const orderAdminRoute = require("./routes/admin/Order");
 
 const homeRoute = require("./routes/Home");
 const cartRoute = require("./routes/Cart");
@@ -56,17 +57,19 @@ app.use(session({
   
 
 //routers
-app.use('/v1/category', categoryApiRoute);
-app.use('/v1/product', productApiRoute);
-app.use('/v1/auth', authApiRoute);
-app.use('/v1/user', userApiRoute);
-app.use('/v1/cart',cartApiRoute);
-app.use('/v1/order', orderApiRoute);
 
 // thêm middleware vào app.use('/', homeRoute);
 app.use('/', middleware.settingMiddleware, homeRoute);
 app.use('/', middleware.settingMiddleware, authRoute);
-app.use('/', middleware.authMiddleware, cartRoute);
+app.use('/', middleware.settingMiddleware, cartRoute);
+
+app.use('/admin', homeAdminRoute);
+app.use('/admin/category', categoryAdminRoute);
+app.use('/admin/product', productAdminRoute);
+app.use('/admin/auth', authAdminRoute);
+app.use('/admin/customer', userAdminRoute);
+app.use('/admin/cart',cartAdminRoute);
+app.use('/admin/order', orderAdminRoute);
 
 let port = 8000;
 app.listen(port, () => console.log('server is running in port ' + port));

@@ -65,6 +65,9 @@ const AuthController = {
                 var sess = req.session; 
                 sess.isLogined = true;
                 sess.username = user;
+                if (user.admin == true) {
+                    return res.redirect('/admin');
+                }
                 return res.redirect('/');
             }
             req.session.failMessage = 'username or password is incorrect!';
