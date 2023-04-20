@@ -5,27 +5,21 @@ const Category = require('../../models/Category');
 const ProductController = {
     //get all
     getAllProducts: async (req, res) => {
-        try {
-            let products = [];
-            if (req.query.category) {
-                const categoryName = req.query.category;
-                const category = await Category.findOne({ name: categoryName });
-                products = await Object.assign(Product.find({ 'category': category._id }));
-                console.log('abc')
-            }
-            else if (req.query.search) {
-                const search = req.query.search;
-                products = await Object.assign(Product.find({ 'name': new RegExp(search, 'i') }));
-                console.log(products)
-            }
-            else {
-                products = await Object.assign(Product.find());
-            }
+        
+        const options = {
+            page: req.query.page || 1, 
+            limit: 12, 
+        };
+        const searchQuery = req.query.search || '';
 
-            return res.status(200).json(products);
-        } catch (err) {
-            return res.status(500).json(err);
-        }
+        const query = {
+            $or: [
+                { name: { $regex: searchQuery, $options: 'i' } },
+                { description: { $regex: searchQuery, $options: 'i' } },
+            ],
+        };
+        const products = await Product.paginate(query, options);
+        return res.render('admin/products', { products, searchQuery });
     },
     getProduct: async (req, res) => {
         try {

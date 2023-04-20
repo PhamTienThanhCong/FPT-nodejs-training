@@ -3,77 +3,91 @@ const Cart = require('../../models/Cart');
 const User = require('../../models/User');
 const Product = require('../../models/Product');
 
+const formatDate= (date) => {
+    let newDate = new Date(date);
+    let formattedDate = newDate.toLocaleDateString();
+    let formattedTime = newDate.toLocaleTimeString();
+    return formattedDate + " " + formattedTime;
+}
+
 const OrderController = {
     getOrders: async(req, res) => {
         try {
-            // Lấy toàn bộ từ mới nhất đến cũ nhất
-            const orders = await Order.find().sort({createdAt: -1});
-            return res.status(200).json(orders);
+            const options = {
+                page: req.query.page || 1, 
+                limit: 12, 
+                sort: { createdAt: -1 }
+            };
+            const searchQuery = req.query.search || '';
+    
+            const query = {
+                $or: [
+                    { 'status': { $regex: searchQuery, $options: 'i' } },
+                ],
+            };
+            // format data
+
+            const orders = await Order.paginate(query, options);
+            const newOrder = orders.docs.map(order => {
+                let statusView;
+                if (order.status.toLowerCase() === 'pending') {
+                    statusView = 'label-warning';
+                } else if (order.status.toLowerCase() === 'done') {
+                    statusView = 'label-success';
+                } else if (order.status.toLowerCase() === 'cancelled'){
+                    statusView = 'label-danger';
+                }else{
+                    statusView = 'label-info';
+                }
+
+                return {
+                    id: order._id,
+                    userId: order.userId,
+                    products: order.products,
+                    userProfile: order.userProfile,
+                    totalPrice: order.totalPrice,
+                    status: order.status,
+                    statusView: statusView,
+                    createdAt: formatDate(order.createdAt),
+                    updatedAt: formatDate(order.updatedAt),
+                }
+            });
+            // return res.send(newOrder);
+            return res.render('admin/order', {newOrder, page: orders.totalPages, searchQuery, currentPage: orders.page});
         }
         catch(err) {
             return res.status(500).json(err);
         }
     },
-    // get user orders
-    getUserOrders: async(req, res) => {
-        try {
-            const orders = await Order.find({userId: req.params.userId});
-            return res.status(200).json(orders);
-        }
-        catch(err) {
-            return res.status(500).json(err);
-        }
-    },
+    
     getOrder: async(req, res) => {
         try {
             const order = await Order.findById(req.params.id);
-            return res.status(200).json(order);
+            
+            order.createdAt = formatDate(order.createdAt);
+            order.createdAt = formatDate(order.createdAt);
+            
+            // return res.status(200).json(order);
+            // date now
+            const dateNow = new Date();
+            const dateNowFormat = formatDate(dateNow);
+            
+            return res.render('admin/order-detail', {order, dateNowFormat});
         }
         catch(err) {
             return res.status(500).json(err);
         }
     },
-    createOrder: async(req, res) => {
-        try {
-            const user = await User.findById(req.params.userId);
-            const cart = await Cart.findById(user.cart);
-            const products = cart.products;
-            cart.products = [];
-            await cart.save();
-            // map products to get product details
-            const productsWithDetails = await Promise.all(products.map(async(product) => {
-                const productDetails = await Product.findById(product.productId);
-                return {
-                    productId: product.productId,
-                    quantity: product.quantity,
-                    name: productDetails.name,
-                    price: productDetails.price,
-                    image: productDetails.image,
-                }
-            }));
-
-            const newOrder = new Order({
-                    userId: user.id,
-                    products: productsWithDetails,
-                    totalPrice: req.body.totalPrice,
-                });
-            await newOrder.save();
-            return res.status(200).json(newOrder);
-        }
-        catch(err) {
-            // console.log(err);
-            return res.status(500).json(err);
-        }
-    },
+    
     updateOrder: async(req, res) => {
         try {
             const order = await Order.findById(req.params.id);
 
-            if(req.body.status) {
-                order.status = req.body.status;
+            if(req.query.status) {
+                order.status = req.query.status;
             }
             await order.save();
-            return res.status(200).json(order);
+            return res.redirect('/admin/order/' + req.params.id);
         }
         catch(err) {
             return res.status(500).json(err);

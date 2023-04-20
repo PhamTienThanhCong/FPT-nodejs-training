@@ -4,8 +4,11 @@ const Product = require('../../models/Product');
 const CategoryController = {
     getAllCategories: async(req, res) => {
         try {
-            const categories = await Category.find();
-            return res.status(200).json(categories);
+            // lấy search từ query
+            const search = req.query.search;
+            // tìm kiếm theo tên
+            const categories = await Category.find({name: {$regex: search, $options: 'i'}}).populate('products');
+            return res.render('admin/category', {categories, search});
         }catch(err) {
             return res.status(500).json(err);
         }
