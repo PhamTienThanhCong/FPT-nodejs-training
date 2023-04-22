@@ -21,7 +21,8 @@ const CategoryController = {
     getCategory: async(req, res) => {
         try {
             const category = await Category.findById(req.params.id).populate('products');
-            return res.status(200).json(category);
+            return res.render('admin/category-detail', {category});
+
         }catch(err) {
             return res.send("error network");
         }
@@ -34,7 +35,14 @@ const CategoryController = {
                 {$pull: {category: req.params.id}}
             );
             await Category.findByIdAndDelete(req.params.id);
-            return res.status(200).json('Category deleted');
+            return res.redirect('/admin/category');
+        }catch(err) {
+            return res.send("error network");
+        }
+    },
+    addCategory: async(req, res) => {
+        try {
+            return res.render('admin/category-add');
         }catch(err) {
             return res.send("error network");
         }
@@ -44,10 +52,22 @@ const CategoryController = {
             const newCategory = await new Category({
                 name: req.body.name,
                 description: req.body.description,
-                image: req.body.image,
             })
+            const imageFile = req.file.filename;
+
+            newCategory.image = `/uploads/categories/${imageFile}`;
+
             const category = await newCategory.save();
-            return res.status(200).json(category);
+            return res.redirect(`/admin/category/${category._id}`);
+        }catch(err) {
+            return res.send(err);
+        }
+    },
+    editCategory: async(req, res) => {
+        try {
+            const category = await Category.findById(req.params.id);
+
+            return res.render('admin/category-edit', {category});
         }catch(err) {
             return res.send("error network");
         }
@@ -57,7 +77,13 @@ const CategoryController = {
             const category = await Category.findByIdAndUpdate(req.params.id, {
                 $set: req.body
             }, {new: true});
-            return res.status(200).json(category);
+            const imageFile = req.file.filename;
+
+            if (imageFile) {
+                category.image = `/uploads/categories/${imageFile}`;
+                await category.save();
+            }
+            return res.redirect(`/admin/category/${category._id}`);
         }catch(err) {
             
             return res.send("error network");

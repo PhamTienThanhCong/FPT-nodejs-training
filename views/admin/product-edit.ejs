@@ -44,7 +44,7 @@
                                     <h3 class="box-title">Edit Product</h3>
                                 </div>
                                 <div class="box-body">
-                                    <form action="/admin/product/<%= product.id %>/edit" method="POST">
+                                    <form action="/admin/product/<%= product.id %>/edit" method="POST" enctype="multipart/form-data">
                                         <div class="form-group">
                                             <label for="name">Product Name:</label>
                                             <input type="text" class="form-control" id="name" name="name"
@@ -56,10 +56,10 @@
                                                 required><%= product.description %></textarea>
                                         </div>
                                         <div class="form-group">
-                                            <label for="image">Product Image URL:</label>
-                                            <input type="text" class="form-control" id="image" name="image"
-                                                value="<%= product.image %>" required>
+                                            <label for="image">Product Image:</label>
+                                            <input type="file" class="form-control-file" id="image" name="image" required>
                                         </div>
+                                        <img src="<%= product.image %>" height="50px" alt="">
                                         <div class="form-group">
                                             <label for="price">Product Price:</label>
                                             <input type="number" class="form-control" id="price" name="price"
@@ -92,7 +92,11 @@
                                         <button type="submit" class="btn btn-primary">Save</button>
                                     </form>
                                     <!-- btn delete -->
+
                                     <form action="/admin/product/<%= product.id %>/delete" method="POST">
+                                        <label for="category">You want 
+                                            <strong>delete</strong> this product
+                                        </label>
                                         <button type="submit" class="btn btn-danger">Delete</button>
                                     </form>
                                 </div>

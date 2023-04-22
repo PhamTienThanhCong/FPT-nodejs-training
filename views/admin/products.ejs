@@ -56,7 +56,8 @@
                                                     <th class="text-center">Image</th>
                                                     <th class="text-center">Name</th>
                                                     <th class="text-center">Price</th>
-                                                    <th class="text-center">Description</th>
+                                                    <th class="text-center">Number visits</th>
+                                                    <th class="text-center">Number add to cart</th>
                                                     <th class="text-center">view</th>
                                                 </tr>
                                                 <% for (let product of products.docs) { %>
@@ -71,7 +72,10 @@
                                                             $<%= product.price %> 
                                                         </td>
                                                         <td>
-                                                            <%= product.description %> $
+                                                            <%= product.views %>
+                                                        </td>
+                                                        <td>
+                                                            <%= product.numberAddedToCart %> 
                                                         </td>
                                                         <td>
                                                             <a href="/admin/product/<%= product.id %>"

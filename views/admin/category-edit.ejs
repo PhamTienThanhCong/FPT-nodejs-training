@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>
+        <%= category.name %> |
+            <%= siteName %>
+    </title>
+
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <%- include('../imports/css.ejs') %>
+
+</head>
+
+<style>
+    .category-image-container {
+        display: flex;
+        justify-content: center;
+    }
+</style>
+
+<body class="hold-transition skin-blue sidebar-mini">
+
+    <div class="wrapper">
+        <%- include('../partials/admin_header.ejs') %>
+            <%- include('../partials/admin_slider.ejs') %>
+
+                <div class="content-wrapper">
+
+                    <section class="content-header">
+                        <h1>
+                            <%= category.name %>
+                        </h1>
+                    </section>
+
+                    <section class="content">
+
+                        <div class="col-md-12">
+                            <div class="box box-default">
+                                <div class="box-header with-border">
+                                    <i class="fa fa-edit"></i>
+                                    <h3 class="box-title">Edit category</h3>
+                                </div>
+                                <div class="box-body">
+                                    <form action="/admin/category/<%= category.id %>/edit" method="POST" enctype="multipart/form-data">
+                                        <div class="form-group">
+                                            <label for="name">category Name:</label>
+                                            <input type="text" class="form-control" id="name" name="name"
+                                                value="<%= category.name %>" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="description">category Description:</label>
+                                            <textarea class="form-control" id="description" name="description" rows="5"
+                                                required><%= category.description %></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="image">category Image:</label>
+                                            <input type="file" class="form-control-file" id="image" name="image" required>
+                                            old photo => <img src="<%= category.image %>" height="50px" alt="">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Save</button>
+                                    </form>
+                                    <!-- btn delete -->
+
+                                    <form action="/admin/category/<%= category.id %>/delete" method="POST">
+                                        <label for="category">You want 
+                                            <strong>delete</strong> this category
+                                        </label>
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                    </section>
+                </div>
+
+                <%- include('../partials/admin_footer.ejs') %>
+
+                    <div class="control-sidebar-bg"></div>
+    </div>
+    <%- include('../imports/js.ejs') %>
+</body>
+
+</html>

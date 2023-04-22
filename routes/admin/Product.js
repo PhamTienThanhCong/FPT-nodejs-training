@@ -1,19 +1,34 @@
 const productController = require('../../controllers/admin/ProductController');
 const router = require('express').Router();
+const path = require('path');
+const multer = require('multer');
 
+// Khởi tạo disk storage engine để lưu trữ file được upload vào thư mục uploads
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'public/uploads/products/')
+    },
+    filename: function (req, file, cb) {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+      cb(null, uniqueSuffix + '-' + file.originalname)
+    }
+  });
+  
+  // Khởi tạo middleware upload với disk storage engine vừa được khởi tạo
+  const upload = multer({ storage: storage });
 
 //get all products
 router.get("/", productController.getAllProducts);
 //create product
 router.get("/add", productController.addProduct);
 //create product
-router.post("/create", productController.createProduct);
+router.post("/create",upload.single('image'), productController.createProduct);
 //get one product
 router.get("/:id", productController.getProduct);
 //update product
 router.get("/:id/edit", productController.editProduct);
 //update product
-router.post("/:id/edit", productController.updateProduct);
+router.post("/:id/edit", upload.single('image'),productController.updateProduct);
 //delete product
 router.post("/:id/delete" ,productController.deleteProduct);
 

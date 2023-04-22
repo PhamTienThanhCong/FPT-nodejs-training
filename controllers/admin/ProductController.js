@@ -1,10 +1,9 @@
 const Product = require('../../models/Product');
 const Category = require('../../models/Category');
 const Order = require('../../models/Order');
-const multer = require('multer');
-const path = require('path');
 
-const formatDate= (date) => {
+
+const formatDate = (date) => {
     let newDate = new Date(date);
     let formattedDate = newDate.toLocaleDateString();
     let formattedTime = newDate.toLocaleTimeString();
@@ -64,7 +63,7 @@ const ProductController = {
                 { $pull: { products: req.params.id } }
             );
             await Product.findByIdAndDelete(req.params.id);
-            return res.render('admin/product');
+            return res.redirect('/admin/product');
         } catch (err) {
             return res.status(500).json(err);
         }
@@ -79,32 +78,28 @@ const ProductController = {
     },
     createProduct: async (req, res) => {
         try {
-          const newProduct = new Product({
-            name: req.body.name,
-            description: req.body.description,
-            price: req.body.price,
-            category: req.body.category,
-            quantity: req.body.quantity,
-          });
-      
-          // Handle image file upload
-          const imageFile = req.files.image;
-          const fileName = `${newProduct.name}-${Math.floor(Math.random() * 1000)}${path.extname(imageFile.name)}`;
-          const filePath = path.join(__dirname, '..', 'public', 'uploads', fileName);
-      
-          await imageFile.mv(filePath);
-          newProduct.image = `/uploads/${fileName}`;
-      
-          const product = await newProduct.save();
-          await Category.findByIdAndUpdate(req.body.category, {
-            $push: { products: product._id }
-          });
-          return res.redirect(`/admin/product/${product._id}`);
+            const newProduct = new Product({
+                name: req.body.name,
+                description: req.body.description,
+                price: req.body.price,
+                category: req.body.category,
+                quantity: req.body.quantity,
+            });
+
+            // Handle image file upload
+            const imageFile = req.file.filename;
+
+            newProduct.image = `/uploads/products/${imageFile}`;
+            const product = await newProduct.save();
+            await Category.findByIdAndUpdate(req.body.category, {
+                $push: { products: product._id }
+            });
+            return res.redirect(`/admin/product/${product._id}`);
         } catch (err) {
-          return res.status(500).json(err);
+            return res.status(500).json(err);
         }
-      },
-      
+    },
+
     editProduct: async (req, res) => {
         try {
             const product = await Product.findById(req.params.id).populate('category');
@@ -120,6 +115,13 @@ const ProductController = {
             const product = await Product.findByIdAndUpdate(req.params.id, {
                 $set: req.body
             }, { new: true });
+            // Handle image file upload
+            const imageFile = req.file.filename;
+
+            if (imageFile) {
+                product.image = `/uploads/products/${imageFile}`;
+            }
+            await product.save();
 
             return res.redirect(`/admin/product/${product._id}`);
         } catch (err) {

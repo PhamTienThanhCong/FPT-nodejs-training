@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>
+        <%= category.name %> |
+            <%= siteName %>
+    </title>
+
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <%- include('../imports/css.ejs') %>
+
+</head>
+
+<style>
+    .category-image-container {
+        display: flex;
+        justify-content: center;
+    }
+</style>
+
+<body class="hold-transition skin-blue sidebar-mini">
+
+    <div class="wrapper">
+        <%- include('../partials/admin_header.ejs') %>
+            <%- include('../partials/admin_slider.ejs') %>
+
+                <div class="content-wrapper">
+
+                    <section class="content-header">
+                        <h1>
+                            <%= category.name %>
+                        </h1>
+                    </section>
+
+                    <section class="content">
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="box box-default">
+                                    <div class="box-header with-border">
+                                        <i class="fa fa-bullhorn"></i>
+                                        <h3 class="box-title">Information</h3>
+                                    </div>
+                                    <div class="box-body">
+                                        <p>ID: <%= category.id %>
+                                        </p>
+                                        <p>Name: <%= category.name %>
+                                        </p>
+                                        <p>Description: <%= category.description %>
+                                        </p>
+                                        <p>Product count: <%= category.products.length %>
+                                        </p>
+                                        
+                                        <p>Image:</p>
+                                        <div class="category-image-container">
+                                            <img src="<%= category.image %>" alt="category Image" class="img-responsive">
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="/admin/category/<%= category.id %>/edit" style="color: white;">
+                                    <button type="button" class="btn btn-block btn-primary">
+                                        <!-- btn edit -->
+                                        edit category
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <%- include('../partials/admin_footer.ejs') %>
+
+                    <div class="control-sidebar-bg"></div>
+    </div>
+    <%- include('../imports/js.ejs') %>
+</body>
+
+</html>
