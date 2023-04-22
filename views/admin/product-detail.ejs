@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>
+        <%= product.name %> |
+            <%= siteName %>
+    </title>
+
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <%- include('../imports/css.ejs') %>
+
+</head>
+
+<style>
+    .product-image-container {
+        display: flex;
+        justify-content: center;
+    }
+</style>
+
+<body class="hold-transition skin-blue sidebar-mini">
+
+    <div class="wrapper">
+        <%- include('../partials/admin_header.ejs') %>
+            <%- include('../partials/admin_slider.ejs') %>
+
+                <div class="content-wrapper">
+
+                    <section class="content-header">
+                        <h1>
+                            <%= product.name %>
+                        </h1>
+                    </section>
+
+                    <section class="content">
+                        <div class="row">
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <div class="info-box">
+                                    <span class="info-box-icon bg-aqua"><i class="fa fa-envelope-o"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">View products</span>
+                                        <span class="info-box-number">
+                                            <%= product.views %>
+                                        </span>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <div class="info-box">
+                                    <span class="info-box-icon bg-green"><i class="fa fa-flag-o"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Add to cart</span>
+                                        <span class="info-box-number">
+                                            <%= product.numberAddedToCart %>
+                                        </span>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <div class="info-box">
+                                    <span class="info-box-icon bg-yellow"><i class="fa fa-files-o"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">total Sales</span>
+                                        <span class="info-box-number">
+                                            <%= totalSales %>
+                                        </span>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <div class="info-box">
+                                    <span class="info-box-icon bg-red"><i class="fa fa-star-o"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">refunded</span>
+                                        <span class="info-box-number">
+                                            <%= totalRefund %>
+                                        </span>
+                                        <span class="info-box-text">
+                                            <% if (totalRefund> 0) { %>
+                                                <%= totalSales / totalRefund * 100 %> %
+                                                    <% }else{ %>
+                                                        0 %
+                                                        <% } %>
+                                        </span>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="box box-default">
+                                    <div class="box-header with-border">
+                                        <i class="fa fa-bullhorn"></i>
+                                        <h3 class="box-title">Information</h3>
+                                    </div>
+                                    <div class="box-body">
+                                        <p>ID: <%= product.id %>
+                                        </p>
+                                        <p>Name: <%= product.name %>
+                                        </p>
+                                        <p>Description: <%= product.description %>
+                                        </p>
+                                        <p>Price: $<%= product.price %>
+                                        </p>
+                                        <p>Category: <%= product.category.name %>
+                                        </p>
+                                        <p>Quantity: <%= product.quantity %>
+                                        </p>
+                                        <p>Created At: <%= createdAt %>
+                                        </p>
+                                        <p>Updated At: <%= updatedAt %>
+                                        </p>
+                                        <p>Active:
+                                            <% if (product.active==true) { %>
+                                                Yes
+                                                <% }else{ %>
+                                                    No
+                                                    <% } %>
+                                        </p>
+                                        <p>Number Added To Cart: <%= product.numberAddedToCart %>
+                                        </p>
+                                        <p>Views: <%= product.views %>
+                                        </p>
+                                        <p>Image:</p>
+                                        <div class="product-image-container">
+                                            <img src="<%= product.image %>" alt="Product Image" class="img-responsive">
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="/admin/product/<%= product.id %>/edit" style="color: white;">
+                                    <button type="button" class="btn btn-block btn-primary">
+                                        <!-- btn edit -->
+                                        edit product
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <%- include('../partials/admin_footer.ejs') %>
+
+                    <div class="control-sidebar-bg"></div>
+    </div>
+    <%- include('../imports/js.ejs') %>
+</body>
+
+</html>

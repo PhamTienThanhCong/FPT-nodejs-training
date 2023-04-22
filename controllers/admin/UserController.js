@@ -11,8 +11,7 @@ const UserController = {
 
         const query = {
             $or: [
-                { name: { $regex: searchQuery, $options: 'i' } },
-                { description: { $regex: searchQuery, $options: 'i' } },
+                { username: { $regex: searchQuery, $options: 'i' } },
             ],
         };
         const users = await User.paginate(query, options);

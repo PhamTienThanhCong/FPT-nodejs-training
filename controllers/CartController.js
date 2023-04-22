@@ -22,7 +22,7 @@ const CartController = {
             const newQuantity = req.body.quantity;
             const cart = await Cart.findById(user.cart);
             let products = cart.products;
-
+            
             let productExists = true;
 
             for(const element of products) {
@@ -38,6 +38,13 @@ const CartController = {
                     productId: productId,
                     quantity: newQuantity
                 });
+                // update numberAddedToCart
+                Product.findByIdAndUpdate(productId, { $inc: { numberAddedToCart: 1 } }, { new: true }, (err, doc) => {
+                    if (err) {
+                        console.log("Something wrong when updating data!");
+                    }
+                }
+                );
             }
 
             if(newQuantity == 0) {

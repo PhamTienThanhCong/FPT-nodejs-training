@@ -36,9 +36,10 @@ const HomeController = {
         const id = req.params.id;
         try {
             const product = await Product.findById(id).populate('category');
-            // tìm 4 sản phẩm có cùng category
+            product.views += 1;
+            await product.save();
+
             const category = await Category.findOne({ name: product.category.name }).populate('products');
-            // get 4 products from category
             category.products = category.products.slice(0, 4);
             res.render('pages/product', { product, category });
         } catch (err) {

@@ -26,6 +26,14 @@ const productSchema = new mongoose.Schema({
         required: true,
         min: 0
     },
+    views: {
+        type: Number,
+        default: 0,
+    },
+    numberAddedToCart: {
+        type: Number,
+        default: 0,
+    },
     category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category'

@@ -6,11 +6,16 @@ const CategoryController = {
         try {
             // lấy search từ query
             const search = req.query.search;
+            if (!search) {
+                // nếu không có search thì trả về tất cả category
+                const categories = await Category.find().populate('products');
+                return res.render('admin/category', {categories, search: ''});
+            }
             // tìm kiếm theo tên
             const categories = await Category.find({name: {$regex: search, $options: 'i'}}).populate('products');
             return res.render('admin/category', {categories, search});
         }catch(err) {
-            return res.status(500).json(err);
+            return res.send("error network");
         }
     },
     getCategory: async(req, res) => {
@@ -18,7 +23,7 @@ const CategoryController = {
             const category = await Category.findById(req.params.id).populate('products');
             return res.status(200).json(category);
         }catch(err) {
-            return res.status(500).json(err);
+            return res.send("error network");
         }
     },
 
@@ -31,7 +36,7 @@ const CategoryController = {
             await Category.findByIdAndDelete(req.params.id);
             return res.status(200).json('Category deleted');
         }catch(err) {
-            return res.status(500).json(err);
+            return res.send("error network");
         }
     },
     createCategory: async(req, res) => {
@@ -44,7 +49,7 @@ const CategoryController = {
             const category = await newCategory.save();
             return res.status(200).json(category);
         }catch(err) {
-            return res.status(500).json(err);
+            return res.send("error network");
         }
     },
     updateCategory: async(req, res) => {
@@ -55,7 +60,7 @@ const CategoryController = {
             return res.status(200).json(category);
         }catch(err) {
             
-            return res.status(500).json(err);
+            return res.send("error network");
         }
     }
 }
