@@ -176,7 +176,7 @@ const CartController = {
                         "currency": "USD",
                         "total": 1000000
                     },
-                    "description": "This is the payment description."
+                    "description": "This is the payment description.",
                 }]
             };
 

@@ -3,7 +3,6 @@ const router = require('express').Router();
 const path = require('path');
 const multer = require('multer');
 
-// Khởi tạo disk storage engine để lưu trữ file được upload vào thư mục uploads
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, 'public/uploads/products/')
@@ -14,7 +13,6 @@ const storage = multer.diskStorage({
     }
   });
   
-  // Khởi tạo middleware upload với disk storage engine vừa được khởi tạo
   const upload = multer({ storage: storage });
 
 //get all products

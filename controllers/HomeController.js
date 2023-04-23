@@ -33,8 +33,8 @@ const HomeController = {
         res.render('pages/productList', { products, searchQuery });
     },
     product: async (req, res) => {
-        const id = req.params.id;
         try {
+            const id = req.params.id;
             const product = await Product.findById(id).populate('category');
             product.views += 1;
             await product.save();
