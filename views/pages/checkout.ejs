@@ -20,20 +20,21 @@
 
 		<%- include('../partials/header') %>
 
-		<div class="home">
-			<div class="home_container">
-				<div class="home_background" style="background-image:url(images/cart.jpg)"></div>
-				<div class="home_content_container">
-					<div class="container">
-						<div class="row">
-							<div class="col">
-								<div class="home_content">
-									<div class="breadcrumbs">
-										<ul>
-											<li><a href="/">Home</a></li>
-											<li><a href="/cart">Cart</a></li>
-											<li>Checkout</li>
-										</ul>
+			<div class="home">
+				<div class="home_container">
+					<div class="home_background" style="background-image:url(images/cart.jpg)"></div>
+					<div class="home_content_container">
+						<div class="container">
+							<div class="row">
+								<div class="col">
+									<div class="home_content">
+										<div class="breadcrumbs">
+											<ul>
+												<li><a href="/">Home</a></li>
+												<li><a href="/cart">Cart</a></li>
+												<li>Checkout</li>
+											</ul>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -41,100 +42,114 @@
 					</div>
 				</div>
 			</div>
-		</div>
 
-		<div class="checkout">
-			<div class="container">
-				<div class="row">
+			<div class="checkout">
+				<div class="container">
+					<form class="row" action="/checkout" method="post" id="checkout_form">
+						<div class="col-lg-6">
+							<div class="billing checkout_section">
+								<div class="section_title">Billing Address</div>
+								<div class="section_subtitle">Enter your address info</div>
+								<div class="checkout_form_container">
+									<div>
+										<div>
+											<label for="checkout_company">Full name*</label>
+											<input type="text" name="name" value="<%= user.username %>"
+												class="checkout_input" required="required">
+										</div>
+										<div>
+											<label for="checkout_zipcode">phone*</label>
+											<input type="text" name="phone" class="checkout_input"
+												value="<%= user.phone %>" required="required">
+										</div>
+										<div>
 
-					<div class="col-lg-6">
-						<div class="billing checkout_section">
-							<div class="section_title">Billing Address</div>
-							<div class="section_subtitle">Enter your address info</div>
-							<div class="checkout_form_container">
-								<form action="/checkout" method="post" id="checkout_form" class="checkout_form">
-									<div>
-										<label for="checkout_company">Full name*</label>
-										<input type="text" name="name" value="<%= user.username %>" class="checkout_input" required="required">
+											<label for="checkout_email">Email Address*</label>
+											<input type="email" name="email" value="<%= user.email %>"
+												class="checkout_input" required="required">
+										</div>
+										<div>
+											<label for="checkout_zipcode">Address*</label>
+											<input type="text" name="address" class="checkout_input"
+												value="<%= user.address %>" required="required">
+										</div>
+										<div>
+											<label for="checkout_zipcode">Note</label>
+											<textarea class="checkout_input" name="note" placeholder="note for shop"
+												cols="30" rows="10" style="height: 200px; padding: 10px;"></textarea>
+										</div>
+										<input type="hidden" name="totalPrice" value="<%= total %>">
 									</div>
-									<div>
-										<label for="checkout_zipcode">phone*</label>
-										<input type="text" name="phone" class="checkout_input" value="<%= user.phone %>" required="required">
-									</div>
-									<div>
-
-										<label for="checkout_email">Email Address*</label>
-										<input type="email" name="email" value="<%= user.email %>" class="checkout_input" required="required">
-									</div>
-									<div>
-										<label for="checkout_zipcode">Address*</label>
-										<input type="text" name="address" class="checkout_input" value="<%= user.address %>" required="required">
-									</div>
-									<div>
-										<label for="checkout_zipcode">Note</label>
-										<textarea class="checkout_input" name="note" placeholder="note for shop" cols="30" rows="10" style="height: 200px; padding: 10px;"></textarea>
-									</div>
-									<input type="hidden" name="totalPrice" value="<%= total %>">
-								</form>
+								</div>
 							</div>
 						</div>
-					</div>
 
-					<div class="col-lg-6">
-						<div class="order checkout_section">
-							<div class="section_title">Your order</div>
-							<div class="section_subtitle">Order details</div>
+						<div class="col-lg-6">
+							<div class="order checkout_section">
+								<div class="section_title">Your order</div>
+								<div class="section_subtitle">Order details</div>
 
-							<div class="order_list_container">
-								<div class="order_list_bar d-flex flex-row align-items-center justify-content-start" style="margin-bottom: 10px;">
-									<div class="order_list_title">Product</div>
-									<div class="order_list_value ml-auto">Total</div>
-								</div>
-								<ul class="order_list">
-									<% for (let product of cart.products) { %>
-										<li class="d-flex flex-row align-items-center justify-content-start mb-1">
-											<div class="order_list_title">- <%= product.productId.name %></div>
-											<div class="order_list_value ml-auto">$<%= product.quantity * product.productId.price %></div>
+								<div class="order_list_container">
+									<div class="order_list_bar d-flex flex-row align-items-center justify-content-start"
+										style="margin-bottom: 10px;">
+										<div class="order_list_title">Product</div>
+										<div class="order_list_value ml-auto">Total</div>
+									</div>
+									<ul class="order_list">
+										<% for (let product of cart.products) { %>
+											<li class="d-flex flex-row align-items-center justify-content-start mb-1">
+												<div class="order_list_title">- <%= product.productId.name %>
+												</div>
+												<div class="order_list_value ml-auto">$<%= product.quantity *
+														product.productId.price %>
+												</div>
+											</li>
+											<% } %>
+									</ul>
+									<ul class="order_list">
+										<li class="d-flex flex-row align-items-center justify-content-start mb-4 mt-4">
+											<div class="order_list_title">Subtotal</div>
+											<div class="order_list_value ml-auto">$<%= total %>
+											</div>
 										</li>
-									<% } %>
-								</ul>
-								<ul class="order_list">
-									<li class="d-flex flex-row align-items-center justify-content-start mb-4 mt-4">
-										<div class="order_list_title">Subtotal</div>
-										<div class="order_list_value ml-auto">$<%= total %></div>
-									</li>
-									<li class="d-flex flex-row align-items-center justify-content-start mb-4">
-										<div class="order_list_title">Shipping</div>
-										<div class="order_list_value ml-auto">Free</div>
-									</li>
-									<li class="d-flex flex-row align-items-center justify-content-start mb-4">
-										<div class="order_list_title">Total</div>
-										<div class="order_list_value ml-auto">$<%= total %></div>
-									</li>
-								</ul>
-							</div>
-
-							<div class="payment">
-								<div class="payment_options mt-4">
-									<label class="payment_option clearfix">Cach on delivery
-										<input type="radio" name="radio" checked>
-										<span class="checkmark"></span>
-									</label>
+										<li class="d-flex flex-row align-items-center justify-content-start mb-4">
+											<div class="order_list_title">Shipping</div>
+											<div class="order_list_value ml-auto">Free</div>
+										</li>
+										<li class="d-flex flex-row align-items-center justify-content-start mb-4">
+											<div class="order_list_title">Total</div>
+											<div class="order_list_value ml-auto">$<%= total %>
+											</div>
+										</li>
+									</ul>
 								</div>
-							</div>
 
-							<div class="order_text">
-								<p>By placing your order, you agree to our <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>.</p>
+								<div class="payment">
+									<div class="payment_options mt-4">
+										<label class="payment_option clearfix">Cach by paypal
+											<input type="radio" name="payment" value="paypal" checked>
+											<span class="checkmark"></span>
+										</label>
+										<label class="payment_option clearfix">Cach on delivery
+											<input type="radio" name="payment" value="Cach on delivery">
+											<span class="checkmark"></span>
+										</label>
+									</div>
+								</div>
+
+								<div class="order_text">
+									<p>By placing your order, you agree to our <a href="#">Terms of Use</a> and <a
+											href="#">Privacy Policy</a>.</p>
+								</div>
+								<div class="button order_button"><a href="#" onclick="submit()">Place Order</a></div>
 							</div>
-							<div class="button order_button"><a href="#" onclick="submit()">Place Order</a></div>
 						</div>
-					</div>
+					</form>
 				</div>
 			</div>
-		</div>
 
-		<div class="footer_overlay"></div>
-		<%- include('../partials/footer') %>
+			<div class="footer_overlay"></div>
+			<%- include('../partials/footer') %>
 	</div>
 	<script src="/js/jquery-3.2.1.min.js"></script>
 	<script src="/styles/bootstrap4/popper.js"></script>
@@ -157,7 +172,7 @@
 		gtag('config', 'UA-23581568-13');
 	</script>
 	<script>
-		function submit(){
+		function submit() {
 			document.getElementById("checkout_form").submit();
 		}
 	</script>

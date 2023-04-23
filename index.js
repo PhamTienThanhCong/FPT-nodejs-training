@@ -6,6 +6,7 @@ const morgan = require('morgan');
 var session = require('express-session');
 const bodyParser = require('body-parser');
 
+
 const homeAdminRoute = require("./routes/admin/Home");
 const categoryAdminRoute = require("./routes/admin/Category");
 const productAdminRoute = require("./routes/admin/Product");
@@ -19,6 +20,7 @@ const cartRoute = require("./routes/Cart");
 const authRoute = require("./routes/Auth");
 
 const middleware = require('./middleware/middleware'); 
+
 
 dotenv.config();
 const app = express();
@@ -61,7 +63,7 @@ app.use(session({
 // thêm middleware vào app.use('/', homeRoute);
 app.use('/', middleware.settingMiddleware, homeRoute);
 app.use('/', middleware.settingMiddleware, authRoute);
-app.use('/', middleware.settingMiddleware, cartRoute);
+app.use('/', middleware.authMiddleware, cartRoute);
 
 app.use('/admin', homeAdminRoute);
 app.use('/admin/category', categoryAdminRoute);
