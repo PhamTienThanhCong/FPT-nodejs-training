@@ -14,6 +14,7 @@ const authAdminRoute = require("./routes/admin/Auth");
 const userAdminRoute = require("./routes/admin/User");
 const cartAdminRoute = require("./routes/admin/Cart");
 const orderAdminRoute = require("./routes/admin/Order");
+const couponAdminRoute = require("./routes/admin/CouponRouter");
 
 const homeRoute = require("./routes/Home");
 const cartRoute = require("./routes/Cart");
@@ -63,7 +64,7 @@ app.use(session({
 // thêm middleware vào app.use('/', homeRoute);
 app.use('/', middleware.settingMiddleware, homeRoute);
 app.use('/', middleware.settingMiddleware, authRoute);
-app.use('/', middleware.authMiddleware, cartRoute);
+app.use('/', middleware.settingMiddleware, cartRoute);
 
 app.use('/admin' ,homeAdminRoute);
 app.use('/admin/category', categoryAdminRoute);
@@ -72,6 +73,7 @@ app.use('/admin/auth', authAdminRoute);
 app.use('/admin/customer', userAdminRoute);
 app.use('/admin/cart',cartAdminRoute);
 app.use('/admin/order', orderAdminRoute);
+app.use('/admin/coupon', couponAdminRoute);
 
 let port = 8000;
 app.listen(port, () => console.log('server is running in port ' + port));

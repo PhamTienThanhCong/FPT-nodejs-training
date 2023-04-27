@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>
+        create Coupon |
+        <%= siteName %>
+    </title>
+
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <%- include('../imports/css.ejs') %>
+
+</head>
+
+<style>
+    .product-image-container {
+        display: flex;
+        justify-content: center;
+    }
+</style>
+
+<body class="hold-transition skin-blue sidebar-mini">
+
+    <div class="wrapper">
+        <%- include('../partials/admin_header.ejs') %>
+            <%- include('../partials/admin_slider.ejs') %>
+
+                <div class="content-wrapper">
+
+                    <section class="content-header">
+                        <h1>
+                            Create new Coupon
+                        </h1>
+                    </section>
+
+                    <section class="content">
+                        <div class="row">
+                            <div class="col-md-12 offset-md-3">
+                                <h1>Create Coupon</h1>
+                                <form method="POST" action="/admin/coupon/create">
+                                    <div class="form-group">
+                                        <label for="name">Coupon Name:</label>
+                                        <input type="text" class="form-control" id="name" name="name" required>
+                                    </div>
+                                    <!-- input Status,Validity,Discount -->
+                                    <div class="form-group">
+                                        <label for="name">Coupon Validity:</label>
+                                        <input type="date" class="form-control" id="Validity" name="Validity" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name">Discount (%):</label>
+                                        <input type="text" class="form-control" id="Discount" name="discount" min="0" max="99" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name">number Of Usage:</label>
+                                        <input type="text" class="form-control" id="Discount" name="numberOfUsage" min="0" max="99" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Create</button>
+                                </form>
+                            </div>
+                        </div>
+
+
+                    </section>
+                </div>
+
+                <%- include('../partials/admin_footer.ejs') %>
+
+                    <div class="control-sidebar-bg"></div>
+    </div>
+    <%- include('../imports/js.ejs') %>
+</body>
+
+</html>
