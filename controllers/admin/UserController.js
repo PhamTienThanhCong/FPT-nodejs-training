@@ -10,9 +10,12 @@ const UserController = {
         const searchQuery = req.query.search || '';
 
         const query = {
-            $or: [
-                { username: { $regex: searchQuery, $options: 'i' } },
-            ],
+            $and: [
+                { $or: [
+                    { username: { $regex: searchQuery, $options: 'i' } },
+                ]},
+                { admin: false }
+            ]
         };
         const users = await User.paginate(query, options);
         const userWithOrders = await Promise.all(
@@ -29,8 +32,48 @@ const UserController = {
                     orderSummary,
                 };
             }));
+            // return res.send(userWithOrders)
         return res.render('admin/users', { users: userWithOrders, searchQuery, totalPages: users.totalPages });
     },
+    // view user by id
+    viewUser: async (req, res) => {
+        try {
+            const user = await User.findById(req.params.id);
+            // return res.send(user);
+            return res.render('admin/user-edit', { user });
+        } catch (error) {
+            
+        }
+    },
+    // update user by id
+    updateUser: async (req, res) => {
+        try {
+            const { username, email, phone, address } = req.body;
+            await User.findByIdAndUpdate(req.params.id, { username, email, phone, address });
+            return res.redirect(`/admin/customer/${req.params.id}/edit`);
+        } catch (error) {
+            
+        }
+    },
+    // block user by id
+    blockUser: async (req, res) => {
+        try {
+            await User.findByIdAndUpdate(req.params.id, { block: true });
+            return res.redirect(`/admin/customer/${req.params.id}/edit`);
+        } catch (error) {
+            
+        }
+    },
+    // unblock user by id
+    unblockUser: async (req, res) => {
+        try {
+            await User.findByIdAndUpdate(req.params.id, { block: false });
+            return res.redirect(`/admin/customer/${req.params.id}/edit`);
+        } catch (error) {
+            
+        }
+    }
+
 }
 
 module.exports = UserController;

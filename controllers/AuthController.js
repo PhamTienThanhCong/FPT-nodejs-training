@@ -62,6 +62,10 @@ const AuthController = {
                 return res.redirect('/login');
             }
             if (user && validPassword) {
+                if (user.block == true) {
+                    req.session.failMessage = 'Your account has been blocked! Please contact the administrator';
+                    return res.redirect('/login');
+                }
                 var sess = req.session; 
                 sess.isLogined = true;
                 sess.username = user;

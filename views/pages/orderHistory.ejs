@@ -48,6 +48,7 @@
 						<th>The number of products</th>
 						<th>Total price</th>
 						<th>Payment methods</th>
+						<th>Coupon</th>
 						<th>Status</th>
 						<th>See details</th>
 					</tr>
@@ -67,15 +68,18 @@
 								<%= data[i].products.length %> products
 							</td>
 							<td>
-								<%= data[i].totalPrice %>
+								$<%= data[i].totalPrice %>
 							</td>
 							<td>
 								<%= data[i].paymentType %>
 							</td>
 							<td>
+								<%= data[i].coupon %>
+							</td>
+							<td>
 								<%= data[i].status %>
 							</td>
-							<td><a href="#" onclick="viewOrderDetails(<%= i %>)">Xem chi tiết</a></td>
+							<td><a href="#" onclick="viewOrderDetails(<%= i %>)">view total</a></td>
 						</tr>
 						<% } %>
 				</tbody>
@@ -93,10 +97,12 @@
 							</button>
 						</div>
 						<div class="modal-body">
-
 						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+						<div class="modal-footer" style="display: flex; justify-content: space-between;">
+							<div id="btn-action">
+								<button type="button" class="btn btn-primary" >Delivery</button>
+							</div>
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 						</div>
 					</div>
 				</div>
@@ -128,7 +134,7 @@
 		const data = <%- JSON.stringify(data) %>;
 		function viewOrderDetails(index) {
 			console.log(data[index]);
-			$('#orderDetailsModalLabel').text(`Chi tiết đơn hàng #${data[index].id}`);
+			$('#orderDetailsModalLabel').text(`Order detail #${data[index].id}`);
 			var productDetails = '';
 			for (var i = 0; i < data[index].products.length; i++) {
 				productDetails += `
@@ -139,25 +145,44 @@
 				</tr>
 				`;
 			}
+			let btnAction = document.getElementById('btn-action');
+			if (data[index].status == 'Delivery'){
+				btnAction.innerHTML = `
+					<a href="/update-order/${data[index].id}?status=Done">
+						<button type="button" class="btn btn-success" >confirm</button>
+					</a>
+					<a href="/update-order/${data[index].id}?status=Returning">
+						<button type="button" class="btn btn-danger" >Return</button>
+					</a>
+					`;
+			} else if (data[index].status == 'Pending' || data[index].status == 'Confirmed'){
+				btnAction.innerHTML = `
+					<a href="/update-order/${data[index].id}?status=Cancelled">
+						<button type="button" class="btn btn-warning" >Cancel</button>
+					</a>`;
+			} else {
+				btnAction.innerHTML = ``;
+			}
+
 			var orderDetails = `
 			<table class="table" style="color: black">
                     <thead class="text-center">
                         <tr>
-                            <th>Tên sản phẩm</th>
-                            <th>Giá</th>
-                            <th>Số lượng</th>
+                            <th>Name product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
                         </tr>
                     </thead>
                     <tbody class="text-center">
                         ${productDetails}
                     </tbody>
                 </table>
-                <p>Ngày đặt: <span>${data[index].createdAt}</span> </p>
-                <p>Trạng thái: <span>${data[index].status}</span> </p>
-                <p><u>Thông tin người nhận:</u></p>
-                <p>Tên: <span>${data[index].userProfile.name}</span> </p>
-                <p>Số điện thoại: <span>${data[index].userProfile.phone}</span> </p>
-                <p>Địa chỉ: <span>${data[index].userProfile.address}</span> </p>
+                <p>Booking date: <span>${data[index].createdAt}</span> </p>
+                <p>Status: <span>${data[index].status}</span> </p>
+                <p><u>Receiver's information:</u></p>
+                <p>Name: <span>${data[index].userProfile.name}</span> </p>
+                <p>Phone number: <span>${data[index].userProfile.phone}</span> </p>
+                <p>Address: <span>${data[index].userProfile.address}</span> </p>
 				<p>note: <span>${data[index].userProfile.note}</span> </p>
 			`;
 			$('#orderDetailsModal .modal-body').html(orderDetails);

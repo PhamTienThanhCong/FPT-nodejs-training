@@ -59,6 +59,8 @@
                                                     <th class="text-center">Total order</th>
                                                     <th class="text-center">Total product</th>
                                                     <th class="text-center">Total price</th>
+                                                    <th class="text-center">Status</th>
+                                                    <th class="text-center">Action</th>
                                                 </tr>
                                                 <% for (let user of users) { %>
                                                     <tr class="text-center">
@@ -81,6 +83,17 @@
                                                         </td>
                                                         <td>
                                                             <%= user.orderSummary.totalAmount %>
+                                                        </td>
+                                                        <td>
+                                                            <% if (user.block == false) { %>
+                                                                <span class="label label-success">Active</span>
+                                                                <% } else { %>
+                                                                <span class="label label-danger">block</span>
+                                                                    <% } %>
+                                                        </td>
+                                                        <td>
+                                                            <a href="/admin/customer/<%= user._id %>/edit"
+                                                                class="btn btn-warning btn-xs">Edit</a>
                                                         </td>
                                                     </tr>
                                                     <% } %>

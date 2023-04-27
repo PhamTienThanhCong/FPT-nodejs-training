@@ -41,11 +41,27 @@
                                                 method="get">
                                                 <select class="form-control" name="search">
                                                     <option value="">All</option>
-                                                    <option value="Pending">Pending</option>
-                                                    <option value="Confirmed">Confirmed</option>
-                                                    <option value="Delivery">Shipping</option>
-                                                    <option value="Cancelled">Cancel</option>
-                                                    <option value="Done">Done</option>
+                                                    <option value="Pending" <% if(searchQuery=="Pending" ) { %> selected
+                                                        <% } %>
+                                                            >Pending</option>
+                                                    <option value="Confirmed" <% if(searchQuery=="Confirmed" ) { %>
+                                                        selected <% } %>
+                                                            >Confirmed</option>
+                                                    <option value="Delivery" <% if(searchQuery=="Delivery" ) { %>
+                                                        selected <% } %>
+                                                            >Shipping</option>
+                                                    <option value="Done" <% if(searchQuery=="Done" ) { %> selected <% }
+                                                            %>
+                                                            >Done</option>
+                                                    <option value="Returning" <% if(searchQuery=="Returning" ) { %>
+                                                        selected <% } %>
+                                                            >Refund</option>
+                                                    <option value="Refunded" <% if(searchQuery=="Refunded" ) { %>
+                                                        selected <% } %>
+                                                            >Refunded</option>
+                                                    <option value="Cancelled" <% if(searchQuery=="Cancelled" ) { %>
+                                                        selected <% } %>
+                                                            >Cancel</option>
                                                 </select>
                                                 <div class="input-group-btn">
                                                     <button type="submit" class="btn btn-default"><i

@@ -38,25 +38,33 @@
                     <section class="content">
                         <div class="row">
                             <div class="col-md-12 offset-md-3">
-                                <h1>Create Category</h1>
-                                <form method="POST" action="/admin/category/create" enctype="multipart/form-data">
-                                    <div class="form-group">
-                                        <label for="name">Category Name:</label>
-                                        <input type="text" class="form-control" id="name" name="name" required>
+                                <div class="box box-primary">
+                                    <div class="box-header with-border">
+                                        <h3 class="box-title">create Category</h3>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="description">Category Description:</label>
-                                        <textarea class="form-control" id="description" name="description" rows="3"
-                                            required></textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="image">Category Image:</label>
-                                        <input type="file" class="form-control-file" id="image" name="image" required>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Create</button>
-                                </form>
+                                    <form method="POST" action="/admin/category/create" enctype="multipart/form-data">
+                                        <div class="box-body">
+                                            <div class="form-group">
+                                                <label for="name">Category Name:</label>
+                                                <input type="text" class="form-control" id="name" name="name" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="description">Category Description:</label>
+                                                <textarea class="form-control" id="description" name="description"
+                                                    rows="3" required></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="image">Category Image:</label>
+                                                <input type="file" class="form-control-file" id="image" name="image"
+                                                    required>
+                                            </div>
+                                        </div>
+                                        <div class="box-footer">
+                                            <button type="submit" class="btn btn-primary">Create</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
-                        </div>
 
 
                     </section>

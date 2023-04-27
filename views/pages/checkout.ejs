@@ -78,7 +78,7 @@
 											<textarea class="checkout_input" name="note" placeholder="note for shop"
 												cols="30" rows="10" style="height: 200px; padding: 10px;"></textarea>
 										</div>
-										<input type="hidden" name="totalPrice" value="<%= total %>">
+										
 									</div>
 								</div>
 							</div>
@@ -112,15 +112,28 @@
 											<div class="order_list_value ml-auto">$<%= total %>
 											</div>
 										</li>
+										<% if (couponDiscount != null) { %>
+											<li class="d-flex flex-row align-items-center justify-content-start mb-4 mt-4">
+												<div class="order_list_title">Coupon: <%= couponDiscount.name %></div>
+												<div class="order_list_value ml-auto"><%= couponDiscount.Discount %> % 
+												</div>
+											</li>
+										<% } %>
 										<li class="d-flex flex-row align-items-center justify-content-start mb-4">
 											<div class="order_list_title">Shipping</div>
 											<div class="order_list_value ml-auto">Free</div>
 										</li>
 										<li class="d-flex flex-row align-items-center justify-content-start mb-4">
 											<div class="order_list_title">Total</div>
-											<div class="order_list_value ml-auto">$<%= total %>
+											<div class="order_list_value ml-auto">$
+												<% if (couponDiscount != null) {
+													total = total - (total * couponDiscount.Discount / 100);
+												}%>
+												<%= total %>
 											</div>
 										</li>
+										<input type="hidden" name="totalPrice" value="<%= total %>">
+										<input type="hidden" name="coupon" value="<%= coupon %>">
 									</ul>
 								</div>
 

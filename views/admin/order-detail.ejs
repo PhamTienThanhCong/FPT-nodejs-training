@@ -185,6 +185,12 @@
                                             Cancel order
                                         </button>
                                     </a>
+                                <% } else if (order.status == 'Returning') { %>
+                                    <a href="/admin/order/<%= order.id %>/update?status=Refunded">
+                                        <button type="button" class="btn btn-primary pull-right" style="margin-right: 5px;">
+                                            Refunded orders
+                                        </button>
+                                    </a>
                                 <% } %>
                             </div>
                         </div>

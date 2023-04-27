@@ -44,9 +44,9 @@ const ProductController = {
                 order.products.forEach(productOrder => {
                     if (productOrder.productId == req.params.id) {
                         totalSales += productOrder.quantity;
-                    }
-                    if (productOrder.productId == req.params.id && productOrder.status == 'refund') {
-                        totalRefund += productOrder.quantity;
+                        if ( order.status == 'Refunded' || order.status == 'Returning') {
+                            totalRefund += productOrder.quantity;
+                        }
                     }
                 })
             })

@@ -35,8 +35,13 @@ const OrderController = {
                 } else if (order.status.toLowerCase() === 'done') {
                     statusView = 'label-success';
                 } else if (order.status.toLowerCase() === 'cancelled'){
+                    statusView = 'label-default';
+                } else if (order.status.toLowerCase() === 'returning'){
                     statusView = 'label-danger';
-                }else{
+                } else if (order.status.toLowerCase() === 'refunded'){
+                    statusView = 'label-primary';
+                }
+                else{
                     statusView = 'label-info';
                 }
 

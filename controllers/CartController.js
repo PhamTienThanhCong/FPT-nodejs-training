@@ -2,6 +2,7 @@ const Order = require('../models/Order');
 const Cart = require('../models/Cart');
 const User = require('../models/User');
 const Product = require('../models/Product');
+const Coupon = require('../models/Coupon');
 
 var paypal = require('paypal-rest-sdk');
 
@@ -11,7 +12,7 @@ paypal.configure({
     'client_secret': 'EMnMwfIbscWaHqe3cJAzrr-WNWTI3iyBX-dC6mcSwwBbYKMNUCY6MWeZKIhVQoOf8Ukg11OoKxutiL42'
 });
 
-const addToOrderFunction = async (req, res, id, totalPrice, userProfile, paymentType) => {
+const addToOrderFunction = async (req, res, id, totalPrice, userProfile, paymentType, coupon) => {
     const user = await User.findById(id);
     const cart = await Cart.findById(user.cart);
     const products = cart.products;
@@ -34,13 +35,45 @@ const addToOrderFunction = async (req, res, id, totalPrice, userProfile, payment
         products: productsWithDetails,
         totalPrice: totalPrice,
         paymentType : paymentType,
+        coupon: coupon
     });
+    // get coupon and update number of usage left
+    if (coupon) {
+        Coupon.findOneAndUpdate({ CouponCode: coupon }, { $inc: { numberOfUsageLeft: -1 } }, { new: true }, (err, doc) => {
+            if (err) {
+                console.log("Something wrong when updating data!");
+            }
+        });
+    }
+        
     await newOrder.save();
 }
 
 const CartController = {
     cart: async (req, res) => {
         var sess = req.session;
+        let coupon = "";
+        let couponDiscount = null;
+        // check from GET request
+        if (req.query.coupon) {
+            coupon = req.query.coupon;
+            coupon = coupon.toLowerCase();
+            // find coupon in database
+            couponDiscount = await Coupon.findOne({ CouponCode: coupon });
+            couponDiscount.expiryDate = new Date(couponDiscount.expiryDate);
+            // format date time
+            var dd = String(couponDiscount.expiryDate.getDate()).padStart(2, '0');
+            var mm = String(couponDiscount.expiryDate.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = couponDiscount.expiryDate.getFullYear();
+            couponDiscount.expiryDate = mm + '/' + dd + '/' + yyyy;
+            // check if coupon is valid
+            if (couponDiscount.expiryDate < Date.now()) {
+                couponDiscount = null;
+            }
+            if (couponDiscount.numberOfUsageLeft < 1) {
+                couponDiscount = null;
+            }
+        }
         const id = sess.username.id;
         const user = await User.findById(id);
         const cart = await Cart.findById(user.cart).populate('products.productId');
@@ -48,7 +81,8 @@ const CartController = {
         for (const element of cart.products) {
             total += element.productId.price * element.quantity;
         }
-        res.render('pages/cart', { cart, total });
+
+        res.render('pages/cart', { cart, total, coupon, couponDiscount });
     },
     addToCart: async (req, res) => {
         try {
@@ -114,13 +148,30 @@ const CartController = {
     checkout: async (req, res) => {
         var sess = req.session;
         const id = sess.username.id;
+        let coupon = "";
+        let couponDiscount = null;
+        // check from GET request
+        if (req.query.coupon) {
+            coupon = req.query.coupon;
+            coupon = coupon.toLowerCase();
+            // find coupon in database
+            couponDiscount = await Coupon.findOne({ CouponCode: coupon });
+            // check if coupon is valid
+            if (couponDiscount.expiryDate < Date.now()) {
+                couponDiscount = null;
+            }
+            if (couponDiscount.numberOfUsageLeft < 1) {
+                couponDiscount = null;
+            }
+
+        }
         const user = await User.findById(id);
         const cart = await Cart.findById(user.cart).populate('products.productId');
         let total = 0;
         for (const element of cart.products) {
             total += element.productId.price * element.quantity;
         }
-        res.render('pages/checkout', { cart, total, id });
+        res.render('pages/checkout', { cart, total, id, coupon, couponDiscount  });
     },
     checkoutPost: async (req, res) => {
         try {
@@ -128,6 +179,7 @@ const CartController = {
             const id = sess.username.id;
             const payment = req.body.payment;
             const totalPrice = req.body.totalPrice;
+            const coupon = req.body.coupon;
             const userProfile = {
                 name: req.body.name,
                 email: req.body.email,
@@ -138,11 +190,11 @@ const CartController = {
             if (payment == 'paypal') {
                 // save userProfile to session
                 sess.userProfile = userProfile;
-                // save totalPrice to session
                 sess.totalPrice = totalPrice;
+                sess.coupon = coupon;
                 return res.redirect('/pay');
             }
-            await addToOrderFunction(req, res, id, totalPrice, userProfile, "Cash on delivery");
+            await addToOrderFunction(req, res, id, totalPrice, userProfile, "Cash on delivery", coupon);
             res.redirect('/checkoutSuccess');
         }
         catch (err) {
@@ -205,9 +257,11 @@ const CartController = {
         const id = sess.username.id;
         const userProfile = sess.userProfile;
         const totalPrice = sess.totalPrice;
+        const coupon = sess.coupon;
         // remove userProfile, totalprice from session
         delete sess.userProfile;
         delete sess.totalPrice;
+        delete sess.coupon;
 
         const execute_payment_json = {
             "payer_id": payerId,
@@ -223,11 +277,27 @@ const CartController = {
                 console.log(error.response);
                 throw error;
             } else {
-                await addToOrderFunction(req, res, id, totalPrice, userProfile, "Paypal");
+                await addToOrderFunction(req, res, id, totalPrice, userProfile, "Paypal", coupon);
 
                 res.redirect('http://localhost:8000/checkoutSuccess');
             }
         });
+    },
+    updateOrder: async(req, res) => {
+        // try {
+            // get id user
+            const id = req.session.username.id;
+            const order = await Order.findOne({ userId: id, _id: req.params.id });
+
+            if(req.query.status) {
+                order.status = req.query.status;
+            }
+            await order.save();
+            res.redirect('/order-History');
+        // }
+        // catch(err) {
+        //     return res.status(500).json(err);
+        // }
     }
 
 }
