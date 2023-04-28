@@ -64,9 +64,9 @@ app.use(session({
 // thêm middleware vào app.use('/', homeRoute);
 app.use('/', middleware.settingMiddleware, homeRoute);
 app.use('/', middleware.settingMiddleware, authRoute);
-app.use('/', middleware.settingMiddleware, cartRoute);
+app.use('/', middleware.authMiddleware, cartRoute);
 
-app.use('/admin' ,homeAdminRoute);
+app.use('/admin',middleware.authAdminMiddleware ,homeAdminRoute);
 app.use('/admin/category', categoryAdminRoute);
 app.use('/admin/product', productAdminRoute);
 app.use('/admin/auth', authAdminRoute);

@@ -42,7 +42,7 @@ async function authAdminMiddleware(req, res, next) {
     if (!sess.isLogined) {
         return res.redirect('/login');
     }
-    if (sess.admin != true) {
+    if (sess.username.admin != true) {
         return res.redirect('/login');
     }
     res.locals.user = sess.username;
