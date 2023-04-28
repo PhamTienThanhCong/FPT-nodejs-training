@@ -35,79 +35,172 @@
 
                     <section class="content">
 
-                        <div class="row">
-                            <div class="col-md-3 col-sm-6 col-xs-12">
-                                <div class="info-box">
-                                    <span class="info-box-icon bg-aqua"><i class="fa fa-fw fa-cart-plus"></i></span>
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">New order to day</span>
-                                        <span class="info-box-number">90<small> Products</small></span>
+                            <div class="row">
+                                <div class="col-md-3 col-sm-6 col-xs-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-yellow"><i class="fa fa-fw fa-users"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Total Users</span>
+                                            <span class="info-box-number">
+                                                <%= data.totalUser %>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-6 col-xs-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-red"><i class="fa fa-fw fa-user-times"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Blocked Users</span>
+                                            <span class="info-box-number">
+                                                <%= data.totalUserBlocked %>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="col-md-3 col-sm-6 col-xs-12">
-                                <div class="info-box">
-                                    <span class="info-box-icon bg-aqua"><i class="fa fa-fw fa-cart-arrow-down"></i></span>
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">Order to confirm</span>
-                                        <span class="info-box-number">20<small> Products</small></span>
+                            <div class="row">
+                                <div class="col-md-3 col-sm-6 col-xs-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-green"><i
+                                                class="fa fa-fw fa-shopping-cart"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Total Products</span>
+                                            <span class="info-box-number">
+                                                <%= data.totalProduct %>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-6 col-xs-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-yellow"><i class="fa fa-fw fa-eye"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Total View Product</span>
+                                            <span class="info-box-number">
+                                                <%= data.totalViewProduct %>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-6 col-xs-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-teal"><i
+                                                class="fa fa-fw fa-cart-arrow-down"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Total Add to Cart</span>
+                                            <span class="info-box-number">
+                                                <%= data.totalAddToCart %>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-6 col-xs-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-aqua"><i class="fa fa-fw fa-cart-plus"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Total Sales</span>
+                                            <span class="info-box-number">
+                                                <%= data.totalSales %>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-6 col-xs-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-red"><i class="fa fa-fw fa-refresh"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Total Refunds</span>
+                                            <span class="info-box-number">
+                                                <%= data.totalRefund %>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-6 col-xs-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-green"><i class="fa fa-fw fa-money"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Total Sales Revenue</span>
+                                            <span class="info-box-number">$<%= data.totalPriceSales %></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-6 col-xs-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-red"><i class="fa fa-fw fa-money"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Total Refund Amount</span>
+                                            <span class="info-box-number">$<%= data.totalPriceRefund %></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-6 col-xs-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-blue"><i class="fa fa-fw fa-money"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Total Sales Success Amount</span>
+                                            <span class="info-box-number">$<%= data.totalPriceSuccess %></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="col-md-3 col-sm-6 col-xs-12">
-                                <div class="info-box">
-                                    <span class="info-box-icon bg-red"><i class="glyphicon glyphicon-shopping-cart"></i></span>
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">Order To refund</span>
-                                        <span class="info-box-number">90<small> Products</small></span>
+                            <div class="row">
+                                <div class="col-md-3 col-sm-6 col-xs-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-purple"><i class="fa fa-fw fa-tags"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Total Coupon Types</span>
+                                            <span class="info-box-number">
+                                                <%= data.totalTypeCoupon %>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="col-md-3 col-sm-6 col-xs-12">
-                                <div class="info-box">
-                                    <span class="info-box-icon bg-green"><i class="fa fa-fw fa-opencart"></i></span>
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">cart success</span>
-                                        <span class="info-box-number">41,410 Products</span>
+                                <div class="col-md-3 col-sm-6 col-xs-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-green"><i class="fa fa-fw fa-tags"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Total Coupon Waiting</span>
+                                            <span class="info-box-number">
+                                                <%= data.totalCouponWaiting %>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="col-md-3 col-sm-6 col-xs-12">
-                                <div class="info-box">
-                                    <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">Sales</span>
-                                        <span class="info-box-number">760</span>
+                                <div class="col-md-3 col-sm-6 col-xs-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-green"><i class="fa fa-fw fa-tags"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Total Coupon Usage</span>
+                                            <span class="info-box-number">
+                                                <%= data.totalCouponUsage %>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="col-md-3 col-sm-6 col-xs-12">
-                                <div class="info-box">
-                                    <span class="info-box-icon bg-yellow"><i
-                                            class="ion ion-ios-people-outline"></i></span>
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">New Members</span>
-                                        <span class="info-box-number">2,000</span>
+                                <div class="col-md-3 col-sm-6 col-xs-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-red"><i class="fa fa-fw fa-tags"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Total Coupon Unaged</span>
+                                            <span class="info-box-number">
+                                                <%= data.totalCouponUnaged %>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="col-md-3 col-sm-6 col-xs-12">
-                                <div class="info-box">
-                                    <span class="info-box-icon bg-yellow"><i
-                                            class="ion ion-ios-people-outline"></i></span>
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">Total Members</span>
-                                        <span class="info-box-number">2,000</span>
+                                <div class="col-md-3 col-sm-6 col-xs-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-gray"><i class="fa fa-fw fa-tags"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Total Coupon Expired</span>
+                                            <span class="info-box-number">
+                                                <%= data.totalCouponExpired %>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
                     </section>
 
                 </div>

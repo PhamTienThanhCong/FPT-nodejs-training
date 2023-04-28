@@ -118,6 +118,7 @@ const CouponController = {
             coupon.name = name;
             coupon.Validity = Validity;
             coupon.Discount = discount;
+            coupon.numberOfUsageLeft = coupon.numberOfUsageLeft + (numberOfUsage - coupon.numberOfUsage);
             coupon.numberOfUsage = numberOfUsage;
             coupon.expiryDate = expiryDate;
             coupon.Status = Status;
