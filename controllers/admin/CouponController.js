@@ -30,7 +30,7 @@ const CouponController = {
 
             const query = {
                 $or: [
-                    { 'code': { $regex: searchQuery, $options: 'i' } },
+                    { 'name': { $regex: searchQuery, $options: 'i' } },
                 ],
             };
             // format data
