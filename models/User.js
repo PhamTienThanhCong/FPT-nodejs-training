@@ -5,22 +5,17 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true,
-        minLength: 3,
-        maxLength: 40,
         unique: true
     },
     password: {
         type: String,
         required: true,
-        minLength: 5,
         // maxLength: 100
     },
     email: {
         type: String,
         unique: true,
         required: true,
-        minLength: 5,
-        maxLength: 50
     },
     admin: {
         type: Boolean,
