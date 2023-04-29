@@ -4,14 +4,11 @@ const Product = require('../../models/Product');
 const CategoryController = {
     getAllCategories: async(req, res) => {
         try {
-            // lấy search từ query
             const search = req.query.search;
             if (!search) {
-                // nếu không có search thì trả về tất cả category
                 const categories = await Category.find().populate('products');
                 return res.render('admin/category', {categories, search: ''});
             }
-            // tìm kiếm theo tên
             const categories = await Category.find({name: {$regex: search, $options: 'i'}}).populate('products');
             return res.render('admin/category', {categories, search});
         }catch(err) {
@@ -60,7 +57,7 @@ const CategoryController = {
             const category = await newCategory.save();
             return res.redirect(`/admin/category/${category._id}`);
         }catch(err) {
-            return res.send(err);
+            return res.redirect(`/admin/category`);
         }
     },
     editCategory: async(req, res) => {

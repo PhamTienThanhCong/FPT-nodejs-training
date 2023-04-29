@@ -7,15 +7,11 @@ const User = require('../../models/User');
 const HomeController = {
     index : async (req, res) => {
         try {
-            // Tìm tất cả User
             const users = await User.find();
-            // Tìm tất cả order
             const orders = await Order.find().sort({ createdAt: -1 });
-            // Tìm tất cả sản phẩm
             const products = await Product.find();
-            // Tìm tất cả coupon
             const coupons = await Coupon.find();
-            // Tính tổng số tiền đã bán
+
             let totalPriceSales = 0;
             let totalPriceRefund = 0;
             let totalPriceSuccess = 0;
@@ -44,11 +40,10 @@ const HomeController = {
                     }
                 })
             })
-            // Tính tổng số tiền đã giảm giá
+
             let totalDiscount = 0;
             orders.forEach(order => {
                 if (order.coupon) {
-                    // tìm discount của coupon
                     coupons.forEach(coupon => {
                         if (coupon.CouponCode == order.coupon) {
                             totalDiscount += order.totalPrice / (1 - coupon.Discount / 100);
@@ -57,13 +52,13 @@ const HomeController = {
                     })
                 }
             })
-            // Tính tổng số người dùng bị chặn
+
             users.forEach(user => {
                 if (user.block == true) {
                     totalUserBlocked ++;
                 }
             })
-            // Tính tổng số coupon đã sử dụng
+
             coupons.forEach(coupon => {
                 totalCouponUnaged += coupon.numberOfUsage - coupon.numberOfUsageLeft;
                 if (coupon.expiryDate < Date.now() || coupon.Status == 'Inactive') {
@@ -75,7 +70,7 @@ const HomeController = {
                     totalCouponWaiting += coupon.numberOfUsageLeft;
                 }
             })
-            // Tính tổng số lượt xem sản phẩm
+            
             products.forEach(product => {
                 totalViewProduct += product.views;
                 totalAddToCart += product.numberAddedToCart;

@@ -34,10 +34,10 @@ const ProductController = {
             const product = await Product.findById(req.params.id).populate('category');
             // format date
             let createdAt = formatDate(product.createdAt);
+
             let updatedAt = formatDate(product.updatedAt);
-            // Tìm tất cả order 
+            
             const orders = await Order.find().sort({ createdAt: -1 });
-            // đếm số lượng sản phẩm đã bán
             let totalSales = 0;
             let totalRefund = 0;
             orders.forEach(order => {

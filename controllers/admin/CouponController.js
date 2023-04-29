@@ -65,7 +65,6 @@ const CouponController = {
         //     return res.status(500).json(err);
         // }
     },
-    // render giao diện create
     createCouponView: async(req, res) => {
         return res.render('admin/coupon-create');
     },
@@ -97,7 +96,6 @@ const CouponController = {
             return res.status(500).json(err);
         }
     },
-    // edit giao dien
     editCouponView: async(req, res) => {
         try {
             const coupon = await Coupon.findById(req.params.id);
